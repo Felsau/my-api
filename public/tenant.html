@@ -115,6 +115,69 @@
         .repair-status { padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500; color: #fff; white-space: nowrap; }
         .status-completed { background-color: var(--success-color); }
         .status-in-progress { background-color: var(--info-color); }
+
+        /* ========== New Repair Form Styles ========== */
+
+        .repair-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd; /* หรือ var(--border-color) ถ้ามี */
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit; /* ทำให้ฟอนต์เหมือนกับส่วนอื่นๆ */
+            background-color: #fff;
+            -webkit-appearance: none; /* สำหรับ Safari/Chrome */
+            -moz-appearance: none; /* สำหรับ Firefox */
+            appearance: none; /* ซ่อนลูกศร dropdown เริ่มต้น */
+        }
+
+        /* เพิ่มลูกศร dropdown เองเพื่อให้สวยงาม */
+        .form-group select {
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 0.65em auto;
+            padding-right: 2.5rem; /* เพิ่มพื้นที่สำหรับลูกศร */
+        }
+
+        .form-group textarea {
+            resize: vertical; /* อนุญาตให้ผู้ใช้ปรับขนาดแนวตั้งได้ */
+        }
+
+        .submit-btn {
+            align-self: flex-start; /* จัดปุ่มไปทางซ้าย */
+            padding: 0.75rem 1.5rem;
+            background-color: #6d28d9; /* สีม่วงเข้ม */
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #5b21b6; /* สีม่วงเข้มขึ้นเมื่อ hover */
+        }
     </style>
 </head>
 <body>
@@ -273,19 +336,40 @@
                     </ul>
                 </div>
             </section>
+<section id="repairs-panel" class="content-panel">
 
-            <section id="repairs-panel" class="content-panel">
-                <div class="panel-card">
-                    <h3><i class="fa-solid fa-list-check"></i> ติดตามสถานะการแจ้งซ่อม</h3>
-                    <div class="repair-list">
-                        </div>
-                </div>
-            </section>
+    <div class="panel-card">
+        <h3><i class="fa-solid fa-circle-plus"></i> แจ้งเรื่องซ่อมใหม่</h3>
+        <form id="new-repair-form" class="repair-form">
+            <div class="form-group">
+                <label for="problem-type">ประเภทปัญหา</label>
+                <select id="problem-type" name="problem-type" required>
+                    <option value="" disabled selected>-- เลือก --</option>
+                    <option value="ปัญหาน้ำประปา">ปัญหาน้ำประปา</option>
+                    <option value="ปัญหาไฟฟ้า">ปัญหาไฟฟ้า</option>
+                    <option value="ปัญหาอินเทอร์เน็ต">ปัญหาอินเทอร์เน็ต</option>
+                    <option value="ปัญหาเครื่องปรับอากาศ">ปัญหาเครื่องปรับอากาศ</option>
+                    <option value="อื่นๆ">อื่นๆ</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="problem-details">รายละเอียด</label>
+                <textarea id="problem-details" name="problem-details" rows="5" placeholder="กรุณาอธิบายปัญหาโดยละเอียด..." required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">ส่งเรื่อง</button>
+        </form>
+    </div>
 
+    <div class="panel-card">
+        <h3><i class="fa-solid fa-list-check"></i> ติดตามสถานะการแจ้งซ่อม</h3>
+        <div class="repair-list">
+            </div>
+    </div>
 
-
-
-
+</section>
+    
+    </div>
+</section>
     </div>
 
     <script>
@@ -339,6 +423,8 @@
                     document.getElementById('overview-panel').innerHTML = `<p class="error-message">ไม่สามารถโหลดข้อมูลภาพรวมได้</p>`;
                 });
         }
+
+        
 
         function fetchAnnouncements() {
             fetch('/api/announcements')
@@ -429,7 +515,60 @@
         }
 
         
-        
+        function handleNewRepairSubmit() {
+        const newRepairForm = document.getElementById('new-repair-form');
+        if (!newRepairForm) return;
+
+        newRepairForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // ป้องกันการรีโหลดหน้าเว็บ
+
+            const submitBtn = this.querySelector('.submit-btn');
+            const originalBtnText = submitBtn.textContent;
+            
+            // ดึงข้อมูลจากฟอร์ม
+            const formData = new FormData(this);
+            const data = {
+                'problem-type': formData.get('problem-type'),
+                'problem-details': formData.get('problem-details')
+            };
+            
+            // แสดงสถานะกำลังส่ง
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'กำลังส่ง...';
+
+            // ส่งข้อมูลไปยัง Backend API
+            fetch('/api/maintenance-requests', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                     // หากเกิดข้อผิดพลาดจาก Server ให้โยน Error
+                    return response.json().then(err => { throw new Error(err.error || 'เกิดข้อผิดพลาดบางอย่าง'); });
+                }
+                return response.json();
+            })
+            .then(result => {
+                if (result.success) {
+                    alert('แจ้งซ่อมสำเร็จ!'); // แสดงข้อความแจ้งเตือน
+                    newRepairForm.reset(); // ล้างฟอร์ม
+                    loadRepairs(); // โหลดรายการแจ้งซ่อมใหม่ เพื่อให้แสดงรายการล่าสุด
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting repair request:', error);
+                alert(`เกิดข้อผิดพลาด: ${error.message}`); // แสดงข้อความ Error
+            })
+            .finally(() => {
+                // คืนค่าปุ่มให้เป็นปกติ
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
+            });
+        });
+    }
 
         function fetchBillingDetails() {
             fetch('/api/billing-details')
@@ -532,7 +671,8 @@
         fetchDashboardData();
         fetchBillingDetails();
         fetchAnnouncements();
-        document.addEventListener('DOMContentLoaded', loadRepairs);
+        loadRepairs();
+        handleNewRepairSubmit();
     });
     </script>
 </body>

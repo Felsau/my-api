@@ -12,11 +12,11 @@ const port = 3000;
 
 // --- Database Connection ---
 const db = new sqlite3.Database('./app_full.db', (err) => {
-  if (err) {
-    console.error('Error connecting to the database:', err.message);
-  } else {
-    console.log('Connected to the SQLite database.');
-  }
+    if (err) {
+        console.error('Error connecting to the database:', err.message);
+    } else {
+        console.log('Connected to the SQLite database.');
+    }
 });
 
 // --- Middleware ---
@@ -29,29 +29,29 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve u
 const sessionSecret = crypto.randomBytes(64).toString('hex');
 
 app.use(session({
-  secret: sessionSecret,
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    secure: false
-  }
+    secret: sessionSecret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false
+    }
 }));
 
 // --- Multer Configuration for File Uploads ---
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const dir = 'uploads/';
-    if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir);
+    destination: function (req, file, cb) {
+        const dir = 'uploads/';
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir);
+        }
+        cb(null, dir);
+    },
+    filename: function (req, file, cb) {
+        const paymentId = req.body.paymentId;
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const filename = `slip-${paymentId}-${uniqueSuffix}${path.extname(file.originalname)}`;
+        cb(null, filename);
     }
-    cb(null, dir);
-  },
-  filename: function (req, file, cb) {
-    const paymentId = req.body.paymentId;
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const filename = `slip-${paymentId}-${uniqueSuffix}${path.extname(file.originalname)}`;
-    cb(null, filename);
-  }
 });
 
 const upload = multer({ storage: storage });
@@ -59,15 +59,15 @@ const upload = multer({ storage: storage });
 
 // --- Helper Functions (Using bcrypt for secure password hashing) ---
 function hashPassword(password) {
-  const saltRounds = 10;
-  return bcrypt.hashSync(password, saltRounds);
+    const saltRounds = 10;
+    return bcrypt.hashSync(password, saltRounds);
 }
 
 function comparePassword(password, hash) {
-  return bcrypt.compareSync(password, hash);
+    return bcrypt.compareSync(password, hash);
 }
 
-// Custom middleware to check if the user is logged in
+// Custom middleware to check if the user is logged in (Declared only ONCE)
 function requireLogin(req, res, next) {
     if (req.session && req.session.user) {
         return next();
@@ -79,7 +79,7 @@ function requireLogin(req, res, next) {
 
 // --- Routes ---
 app.get('/', (req, res) => {
-  res.redirect('/login.html');
+    res.redirect('/login.html');
 });
 
 app.post('/login', (req, res) => {
@@ -106,124 +106,124 @@ app.post('/login', (req, res) => {
 });
 
 app.get('/owner', (req, res) => {
-  if (req.session.user && req.session.user.role === 'owner') {
-    res.sendFile(path.join(__dirname, 'public', 'owner.html'));
-  } else {
-    res.redirect('/login.html');
-  }
+    if (req.session.user && req.session.user.role === 'owner') {
+        res.sendFile(path.join(__dirname, 'public', 'owner.html'));
+    } else {
+        res.redirect('/login.html');
+    }
 });
 
 app.get('/tenant', (req, res) => {
-  if (req.session.user && req.session.user.role === 'tenant') {
-    res.sendFile(path.join(__dirname, 'public', 'tenant.html'));
-  } else {
-    res.redirect('/login.html');
-  }
+    if (req.session.user && req.session.user.role === 'tenant') {
+        res.sendFile(path.join(__dirname, 'public', 'tenant.html'));
+    } else {
+        res.redirect('/login.html');
+    }
 });
 
 app.get('/api/tenant/dashboard', requireLogin, (req, res) => {
-  if (req.session.user.role !== 'tenant') {
-    return res.status(403).json({ error: 'Forbidden' });
-  }
+    if (req.session.user.role !== 'tenant') {
+        return res.status(403).json({ error: 'Forbidden' });
+    }
 
-  const tenantId = req.session.user.id;
-  const dashboardData = {};
-  dashboardData.userInfo = req.session.user;
+    const tenantId = req.session.user.id;
+    const dashboardData = {};
+    dashboardData.userInfo = req.session.user;
 
-  // Temporary variables to hold billing components
-  let room_rent = 0;
-  let water_bill = 0;
-  let electricity_bill = 0;
+    // Temporary variables to hold billing components
+    let room_rent = 0;
+    let water_bill = 0;
+    let electricity_bill = 0;
 
-  const dbPromises = [];
+    const dbPromises = [];
 
-  // Promise to get the base payment record (ID, due_date, etc.)
-  dbPromises.push(new Promise((resolve, reject) => {
-    const paymentSql = `
+    // Promise to get the base payment record (ID, due_date, etc.)
+    dbPromises.push(new Promise((resolve, reject) => {
+        const paymentSql = `
       SELECT id, amount, due_date, status
       FROM payments
       WHERE tenant_id = ? AND status IN ('pending', 'overdue')
       ORDER BY due_date DESC
       LIMIT 1`;
-    db.get(paymentSql, [tenantId], (err, row) => {
-      if (err) return reject(err);
-      dashboardData.payment = row || null;
-      resolve();
-    });
-  }));
+        db.get(paymentSql, [tenantId], (err, row) => {
+            if (err) return reject(err);
+            dashboardData.payment = row || null;
+            resolve();
+        });
+    }));
 
-  // Promise to get maintenance request info
-  dbPromises.push(new Promise((resolve, reject) => {
-    const maintenanceSql = `
+    // Promise to get maintenance request info
+    dbPromises.push(new Promise((resolve, reject) => {
+        const maintenanceSql = `
       SELECT issue_type, status, COUNT(*) as count
       FROM maintenance_requests
       WHERE tenant_id = ? AND status != 'completed'`;
-    db.get(maintenanceSql, [tenantId], (err, row) => {
-      if (err) return reject(err);
-      dashboardData.maintenance = row || null;
-      resolve();
-    });
-  }));
-  
-  // Promise to get the latest announcement
-  dbPromises.push(new Promise((resolve, reject) => {
-    const announcementSql = `
+        db.get(maintenanceSql, [tenantId], (err, row) => {
+            if (err) return reject(err);
+            dashboardData.maintenance = row || null;
+            resolve();
+        });
+    }));
+
+    // Promise to get the latest announcement
+    dbPromises.push(new Promise((resolve, reject) => {
+        const announcementSql = `
       SELECT title
       FROM announcements
       ORDER BY created_at DESC
       LIMIT 1`;
-    db.get(announcementSql, [], (err, row) => {
-      if (err) return reject(err);
-      dashboardData.announcement = row || null;
-      resolve();
-    });
-  }));
+        db.get(announcementSql, [], (err, row) => {
+            if (err) return reject(err);
+            dashboardData.announcement = row || null;
+            resolve();
+        });
+    }));
 
-  // --- ADDED LOGIC: Fetch billing details to calculate the correct total ---
-  dbPromises.push(new Promise((resolve, reject) => {
-    const roomSql = `
+    // --- ADDED LOGIC: Fetch billing details to calculate the correct total ---
+    dbPromises.push(new Promise((resolve, reject) => {
+        const roomSql = `
         SELECT r.rent
         FROM rooms r
         JOIN users u ON u.room_id = r.id
         WHERE u.id = ?`;
-    db.get(roomSql, [tenantId], (err, row) => {
-        if (err) return reject(err);
-        room_rent = row ? row.rent : 0;
-        resolve();
-    });
-  }));
+        db.get(roomSql, [tenantId], (err, row) => {
+            if (err) return reject(err);
+            room_rent = row ? row.rent : 0;
+            resolve();
+        });
+    }));
 
-  dbPromises.push(new Promise((resolve, reject) => {
-      const utilitiesSql = `
+    dbPromises.push(new Promise((resolve, reject) => {
+        const utilitiesSql = `
           SELECT water_fee, elec_usage
           FROM utilities
           WHERE tenant_id = ?
           ORDER BY created_at DESC
           LIMIT 1`;
-      db.get(utilitiesSql, [tenantId], (err, row) => {
-          if (err) return reject(err);
-          if (row) {
-              water_bill = row.water_fee || 0;
-              const electricityRate = 4.1;
-              electricity_bill = (row.elec_usage || 0) * electricityRate;
-          }
-          resolve();
-      });
-  }));
-  // --- END of ADDED LOGIC ---
+        db.get(utilitiesSql, [tenantId], (err, row) => {
+            if (err) return reject(err);
+            if (row) {
+                water_bill = row.water_fee || 0;
+                const electricityRate = 4.1;
+                electricity_bill = (row.elec_usage || 0) * electricityRate;
+            }
+            resolve();
+        });
+    }));
+    // --- END of ADDED LOGIC ---
 
-  Promise.all(dbPromises)
-    .then(() => {
-      if (dashboardData.payment) {
-        const totalAmount = room_rent + water_bill + electricity_bill;
-        dashboardData.payment.amount = totalAmount;
-      }
-      res.json(dashboardData);
-    })
-    .catch(err => {
-      console.error('Error fetching dashboard data:', err);
-      res.status(500).json({ error: 'Failed to fetch dashboard data' });
-    });
+    Promise.all(dbPromises)
+        .then(() => {
+            if (dashboardData.payment) {
+                const totalAmount = room_rent + water_bill + electricity_bill;
+                dashboardData.payment.amount = totalAmount;
+            }
+            res.json(dashboardData);
+        })
+        .catch(err => {
+            console.error('Error fetching dashboard data:', err);
+            res.status(500).json({ error: 'Failed to fetch dashboard data' });
+        });
 });
 
 app.get('/logout', (req, res) => {
@@ -316,7 +316,7 @@ app.post('/api/announcements', requireLogin, (req, res) => {
         return res.status(400).json({ error: 'Title and content are required.' });
     }
     const sql = `INSERT INTO announcements (title, content, target) VALUES (?, ?, ?)`;
-    db.run(sql, [title, content, target ? target.toLowerCase() : 'all'], function(err) {
+    db.run(sql, [title, content, target ? target.toLowerCase() : 'all'], function (err) {
         if (err) {
             console.error('Error inserting announcement:', err);
             return res.status(500).json({ error: 'Failed to create announcement' });
@@ -347,6 +347,31 @@ app.get('/api/maintenance-requests', requireLogin, (req, res) => {
     });
 });
 
+app.get('/api/repairs', requireLogin, (req, res) => {
+    if (req.session.user.role !== 'tenant') {
+        return res.status(403).json({
+            error: 'Forbidden'
+        });
+    }
+
+    const tenantId = req.session.user.id;
+    const sql = `
+    SELECT issue_type, details, status, created_at
+    FROM maintenance_requests
+    WHERE tenant_id = ?
+    ORDER BY created_at DESC`;
+
+    db.all(sql, [tenantId], (err, rows) => {
+        if (err) {
+            console.error('Error fetching maintenance requests:', err);
+            return res.status(500).json({
+                error: 'Failed to fetch maintenance requests'
+            });
+        }
+        res.json(rows);
+    });
+});
+
 // --- New Route for Slip Upload ---
 app.post('/api/upload-slip', requireLogin, upload.single('paymentSlip'), (req, res) => {
     if (!req.file) {
@@ -369,7 +394,7 @@ app.post('/api/upload-slip', requireLogin, upload.single('paymentSlip'), (req, r
         WHERE
             id = ? AND tenant_id = ?`;
 
-    db.run(sql, [slipFilename, paymentId, req.session.user.id], function(err) {
+    db.run(sql, [slipFilename, paymentId, req.session.user.id], function (err) {
         if (err) {
             console.error('Database error during slip upload:', err);
             return res.status(500).json({ error: 'Database error.' });
@@ -390,6 +415,47 @@ app.get('/api/userinfo', (req, res) => {
     }
 });
 
+// =================================================================
+// --- API: เพิ่มรายการแจ้งซ่อมใหม่ (ระบบใหม่) ---
+// =================================================================
+app.post('/api/maintenance-requests', requireLogin, (req, res) => {
+    // ตรวจสอบก่อนว่าผู้ใช้ที่ล็อกอินอยู่คือ 'tenant' (ผู้เช่า)
+    if (req.session.user.role !== 'tenant') {
+        return res.status(403).json({ success: false, error: 'Forbidden' });
+    }
+
+    // ดึงข้อมูลประเภทปัญหาและรายละเอียดที่ส่งมาจากหน้าเว็บ
+    const { 'problem-type': problemType, 'problem-details': details } = req.body;
+    const tenantId = req.session.user.id;
+
+    // ตรวจสอบว่ากรอกข้อมูลมาครบหรือไม่
+    if (!problemType || !details) {
+        return res.status(400).json({ success: false, error: 'กรุณากรอกข้อมูลให้ครบถ้วน' });
+    }
+
+    // เตรียมคำสั่ง SQL เพื่อเพิ่มข้อมูลลงในตาราง maintenance_requests
+    const sql = `
+        INSERT INTO maintenance_requests (tenant_id, issue_type, details, status)
+        VALUES (?, ?, ?, 'pending')
+    `;
+
+    // สั่งให้ฐานข้อมูลทำงาน (run a query)
+    db.run(sql, [tenantId, problemType, details], function (err) {
+        if (err) {
+            // หากเกิดข้อผิดพลาดในการบันทึก
+            console.error("Database error creating maintenance request:", err.message);
+            return res.status(500).json({ success: false, error: 'เกิดข้อผิดพลาดในการบันทึกข้อมูล' });
+        }
+        
+        // หากบันทึกสำเร็จ ส่งข้อความยืนยันกลับไป
+        res.status(201).json({
+            success: true,
+            message: 'แจ้งซ่อมสำเร็จ!'
+        });
+    });
+});
+
+
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+    console.log(`Server running at http://localhost:${port}`);
 });
