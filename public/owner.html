@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Owner Dashboard</title>
+    <style>body { font-family: sans-serif; padding: 20px; }</style>
+</head>
+<body>
+    <h1 id="welcome-message">Welcome, Owner!</h1>
+    <div id="user-info"></div>
+    <a href="/logout">Logout</a>
+
+    <script>
+        // Script สำหรับดึงข้อมูล User มาแสดง
+        fetch('/api/userinfo')
+            .then(response => response.json())
+            .then(data => {
+                if (data.user) {
+                    document.getElementById('welcome-message').textContent = `Welcome, ${data.user.name}! (Owner)`;
+                    document.getElementById('user-info').innerHTML = `
+                        <p><strong>Email:</strong> ${data.user.email}</p>
+                        <p><strong>Phone:</strong> ${data.user.phone}</p>
+                    `;
+                }
+            });
+    </script>
+</body>
+</html>

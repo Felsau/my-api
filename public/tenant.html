@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenant Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #552f87;
+            --primary-hover: #44266a;
+            --sidebar-bg: #1f2937;
+            --sidebar-text: #d1d5db;
+            --sidebar-text-hover: #ffffff;
+            --sidebar-active-bg: #374151;
+            --main-bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-dark: #111827;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --danger-color: #ef4444;
+            --success-color: #22c55e;
+            --rent-due-color: #ef4444;
+            --maintenance-color: #3b82f6;
+            --info-color: #f59e0b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Kanit', sans-serif; background-color: var(--main-bg); color: var(--text-dark); line-height: 1.6; }
+
+        .dashboard-layout { display: flex; min-height: 100vh; }
+        .sidebar { width: 260px; background-color: var(--sidebar-bg); color: var(--sidebar-text); display: flex; flex-direction: column; transition: width 0.3s ease; }
+        .sidebar-header { padding: 1.5rem; border-bottom: 1px solid #374151; }
+        .logo { font-size: 1.8rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.75rem; text-decoration: none;}
+        .sidebar-menu { list-style: none; flex-grow: 1; margin-top: 1rem; }
+        .sidebar-menu a { position: relative; display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; color: var(--sidebar-text); text-decoration: none; transition: background-color 0.2s, color 0.2s; border-left: 3px solid transparent; }
+        .sidebar-menu a:hover { background-color: var(--sidebar-active-bg); color: var(--sidebar-text-hover); }
+        .sidebar-menu a.active { background-color: var(--sidebar-active-bg); color: var(--sidebar-text-hover); border-left-color: var(--primary-color); }
+        .sidebar-menu a i { font-size: 1.2rem; width: 20px; text-align: center; }
+        .sidebar-footer { padding: 1.5rem; border-top: 1px solid #374151; }
+        .logout-button { display: flex; align-items: center; gap: 1rem; text-decoration: none; color: var(--sidebar-text); transition: color 0.2s; }
+        .notification-badge { position: absolute; top: 10px; left: 45px; background-color: var(--danger-color); color: white; font-size: 0.7rem; font-weight: bold; width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid var(--sidebar-bg); }
+
+        .main-content { flex-grow: 1; padding: 2rem; overflow-y: auto; }
+        .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .main-header h1 { font-size: 2.2rem; }
+        .user-info { font-weight: 500; }
+        
+        .content-panel { display: none; animation: fadeIn 0.5s ease-in-out; }
+        .content-panel.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .overview-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .card, .panel-card { background-color: var(--card-bg); padding: 1.5rem; border-radius: 12px; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
+        
+        .card-header { display: flex; align-items: flex-start; gap: 1rem; }
+        .card-icon { background-color: var(--primary-color); color: #fff; width: 50px; height: 50px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; flex-shrink: 0; }
+        .card-content h3 { font-size: 1rem; color: var(--text-light); font-weight: 500; margin: 0 0 0.25rem 0;}
+        .card-content p { font-size: 1.8rem; font-weight: 700; margin: 0; }
+        
+        .panel-card h2, .panel-card h3 { font-size: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+        
+        .reminders-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+        .reminders-list li { display: flex; align-items: center; gap: 1rem; padding: 1rem; background-color: #f9fafb; border-radius: 8px; border-left: 4px solid; }
+        .reminders-list .rent-due { border-color: var(--rent-due-color); }
+        .reminders-list .maintenance { border-color: var(--maintenance-color); }
+        .reminders-list .info { border-color: var(--info-color); }
+        .reminders-list i { font-size: 1.2rem; }
+        .reminders-list .rent-due i { color: var(--rent-due-color); }
+        .reminders-list .maintenance i { color: var(--maintenance-color); }
+        .reminders-list .info i { color: var(--info-color); }
+        .reminders-list .description { color: var(--text-light); }
+
+        .payment-breakdown { list-style: none; padding: 0; margin: 1.5rem 0; }
+        .payment-breakdown li { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); }
+        .payment-breakdown li:last-child { border-bottom: none; }
+        .payment-breakdown .item-desc { color: var(--text-light); }
+        .payment-breakdown .item-price { font-weight: 500; }
+
+        .payment-total { font-size: 1.4rem; font-weight: 700; display: flex; justify-content: space-between; margin-top: 1rem; }
+        
+        .qr-code-container { text-align: center; margin: 2rem 0; border-top: 1px solid var(--border-color); padding-top: 2rem; }
+        .qr-code-container p { margin-bottom: 1rem; font-weight: 500; }
+        .qr-code-img { width: 200px; height: 200px; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; background: #fff; }
+        .qr-code-container .total-amount { font-size: 1.5rem; font-weight: 700; margin-top: 1rem; }
+        
+        .bank-details { margin-top: 2rem; background-color: #f9fafb; padding: 1.5rem; border-radius: 8px; }
+        .bank-details-table { width: 100%; border-collapse: collapse; }
+        .bank-details-table td { padding: 0.6rem 0; }
+        .bank-details-table td:first-child { font-weight: 500; color: var(--text-light); width: 120px;}
+
+        /* --- Slip Upload Form Styles --- */
+        #slip-upload-section {
+            margin-top: 2.5rem;
+            border-top: 2px solid var(--border-color);
+            padding-top: 2rem;
+        }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; font-weight: 500; margin-bottom: 0.5rem; }
+        .form-group input[type="file"] {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: #f9fafb;
+        }
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .submit-btn:hover { background-color: var(--primary-hover); }
+        .submit-btn:disabled { background-color: var(--text-light); cursor: not-allowed; }
+        #upload-status {
+            margin-top: 1rem;
+            font-weight: 500;
+            padding: 0.8rem;
+            border-radius: 8px;
+            display: none;
+        }
+        #upload-status.success { background-color: #d1fae5; color: #065f46; display: block; }
+        #upload-status.error { background-color: #fee2e2; color: #991b1b; display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="#" class="logo">
+                    <i class="fa-solid fa-house-user"></i>
+                    <span>บ้านพักกัน</span>
+                </a>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active" data-target="overview-panel"><i class="fa-solid fa-table-columns"></i> <span>ภาพรวม</span></a></li>
+                <li><a href="#" data-target="payments-panel"><i class="fa-solid fa-file-invoice-dollar"></i> <span>การชำระเงิน</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-bullhorn"></i> <span>ประกาศ</span><span class="notification-badge">1</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-screwdriver-wrench"></i> <span>แจ้งซ่อม</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-file-signature"></i> <span>สัญญาเช่า</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-scroll"></i> <span>กฎระเบียบ</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-calendar-days"></i> <span>ปฏิทิน</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-address-book"></i> <span>ติดต่อเจ้าของ</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-right-from-bracket"></i> <span>แจ้งย้ายออก</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-user-circle"></i> <span>ข้อมูลส่วนตัว</span></a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="/logout" class="logout-button">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>ออกจากระบบ</span>
+                </a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <h1 id="main-title">ภาพรวม</h1>
+                <div class="user-info" id="welcome-message">กำลังโหลด...</div>
+            </header>
+
+            <section id="overview-panel" class="content-panel active">
+                <div class="overview-cards">
+                    <div class="card">
+                        <div class="card-header">
+                             <div class="card-icon"><i class="fa-solid fa-wallet"></i></div>
+                             <div class="card-content">
+                                 <h3>ยอดชำระเดือนนี้</h3>
+                                 <p id="overview-amount">-,--- บาท</p>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                         <div class="card-header">
+                             <div class="card-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                             <div class="card-content">
+                                 <h3>กำหนดชำระ</h3>
+                                 <p id="overview-due-date">--/--/----</p>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                         <div class="card-header">
+                             <div class="card-icon"><i class="fa-solid fa-wrench"></i></div>
+                             <div class="card-content">
+                                 <h3>รายการแจ้งซ่อม</h3>
+                                 <p id="overview-maintenance-count">- รายการ</p>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-card">
+                    <h2><i class="fa-solid fa-bell"></i>การแจ้งเตือนและนัดหมายเร็วๆ นี้</h2>
+                    <ul class="reminders-list" id="reminders-list">
+                         <li class="info">
+                             <i class="fa-solid fa-spinner fa-spin"></i>
+                             <div>
+                                 <span class="description">กำลังโหลดข้อมูล...</span>
+                             </div>
+                         </li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section id="payments-panel" class="content-panel">
+                <div class="panel-card">
+                    <h2><i class="fa-solid fa-receipt"></i> ชำระเงินรอบปัจจุบัน</h2>
+                    
+                    <ul class="payment-breakdown">
+                        <li>
+                            <span class="item-desc">ค่าเช่าห้อง</span>
+                            <span class="item-price" id="rent-amount">-,--- บาท</span>
+                        </li>
+                        <li>
+                            <span class="item-desc">ค่าน้ำ</span>
+                            <span class="item-price" id="water-amount">-,--- บาท</span>
+                        </li>
+                        <li>
+                            <span class="item-desc">ค่าไฟ</span>
+                            <span class="item-price" id="electricity-amount">-,--- บาท</span>
+                        </li>
+                    </ul>
+
+                    <div class="payment-total">
+                        <span>ยอดรวม</span>
+                        <span id="total-amount">-,--- บาท</span>
+                    </div>
+
+                    <div class="qr-code-container">
+                        <p>สแกน QR Code นี้เพื่อชำระเงิน</p>
+                        <img id="qr-code-img" src="" alt="QR Code for Payment" class="qr-code-img">
+                        <div class="total-amount" id="qr-total-amount"></div>
+                    </div>
+
+                    <div class="bank-details">
+                        <h4>หรือโอนผ่านบัญชีธนาคาร:</h4>
+                        <table class="bank-details-table">
+                            <tbody>
+                                <tr>
+                                    <td>ธนาคาร:</td>
+                                    <td>กสิกรไทย</td>
+                                </tr>
+                                <tr>
+                                    <td>ชื่อบัญชี:</td>
+                                    <td>นายสมชาย รักดี</td>
+                                </tr>
+                                <tr>
+                                    <td>เลขที่บัญชี:</td>
+                                    <td>123-4-56789-0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="slip-upload-section">
+                        <h3><i class="fa-solid fa-cloud-arrow-up"></i> อัปโหลดสลิปชำระเงิน</h3>
+                        <form id="slip-upload-form">
+                            <div class="form-group">
+                                <label for="paymentSlip">เลือกไฟล์สลิป (รูปภาพเท่านั้น)</label>
+                                <input type="file" id="paymentSlip" name="paymentSlip" accept="image/*" required>
+                                <input type="hidden" id="paymentId" name="paymentId">
+                            </div>
+                            <button type="submit" class="submit-btn" id="upload-button">ยืนยันการชำระเงิน</button>
+                        </form>
+                        <div id="upload-status"></div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let currentPaymentId = null;
+
+        function fetchDashboardData() {
+            fetch('/api/tenant/dashboard')
+                .then(response => {
+                    if (!response.ok) {
+                        window.location.href = '/login.html';
+                        throw new Error('Not authenticated');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('welcome-message').textContent = data.userInfo && data.userInfo.name ? `สวัสดี, ${data.userInfo.name}` : 'ยินดีต้อนรับ';
+                    
+                    if (data.payment) {
+                        currentPaymentId = data.payment.id;
+                        document.getElementById('paymentId').value = currentPaymentId;
+                        document.getElementById('overview-amount').textContent = `${data.payment.amount.toLocaleString()} บาท`;
+                        const dueDate = new Date(data.payment.due_date);
+                        document.getElementById('overview-due-date').textContent = `${dueDate.getDate()} ${dueDate.toLocaleString('th-TH', { month: 'short' })} ${dueDate.getFullYear() + 543}`;
+                        document.getElementById('slip-upload-section').style.display = 'block';
+                    } else {
+                        document.getElementById('overview-amount').textContent = '0 บาท';
+                        document.getElementById('overview-due-date').textContent = 'ไม่มี';
+                        document.getElementById('slip-upload-section').style.display = 'none'; // ซ่อนฟอร์มอัปโหลดถ้าไม่มีบิล
+                    }
+
+                    document.getElementById('overview-maintenance-count').textContent = data.maintenance && data.maintenance.count > 0 ? `${data.maintenance.count} รายการ` : '0 รายการ';
+                    
+                    const remindersList = document.getElementById('reminders-list');
+                    remindersList.innerHTML = '';
+                    if (data.payment && data.payment.status !== 'paid') {
+                        remindersList.innerHTML += `<li class="rent-due"><i class="fa-solid fa-file-invoice-dollar"></i><div><span class="description">กำหนดชำระค่าเช่าวันที่ ${document.getElementById('overview-due-date').textContent}</span></div></li>`;
+                    }
+                    if (data.maintenance && data.maintenance.status === 'pending') {
+                        remindersList.innerHTML += `<li class="maintenance"><i class="fa-solid fa-screwdriver-wrench"></i><div><span class="description">รายการแจ้งซ่อม "${data.maintenance.issue_type}" กำลังดำเนินการ</span></div></li>`;
+                    }
+                    if (data.announcement) {
+                        remindersList.innerHTML += `<li class="info"><i class="fa-solid fa-bullhorn"></i><div><span class="description">ประกาศล่าสุด: ${data.announcement.title}</span></div></li>`;
+                    }
+                    if (remindersList.children.length === 0) {
+                        remindersList.innerHTML = `<li class="info"><i class="fa-solid fa-circle-check"></i><div><span class="description">ไม่มีรายการแจ้งเตือนในขณะนี้</span></div></li>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching dashboard data:', error);
+                });
+        }
+
+        function fetchBillingDetails() {
+            fetch('/api/billing-details')
+                .then(response => {
+                    if (!response.ok) throw new Error('Could not fetch billing details');
+                    return response.json();
+                })
+                .then(data => {
+                    const formatNumber = (num) => num.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    const formatInteger = (num) => num.toLocaleString('th-TH');
+
+                    document.getElementById('rent-amount').textContent = `${formatInteger(data.room_rent)} บาท`;
+                    document.getElementById('water-amount').textContent = `${formatInteger(data.water_bill)} บาท`;
+                    document.getElementById('electricity-amount').textContent = `${formatNumber(data.electricity_bill)} บาท`;
+                    document.getElementById('total-amount').textContent = `${formatNumber(data.total_amount)} บาท`;
+
+                    const totalAmountForQR = data.total_amount.toFixed(2);
+                    const promptPayId = '0999999999';
+                    
+                    document.getElementById('qr-code-img').src = `https://promptpay.io/${promptPayId}/${totalAmountForQR}.png`;
+                    document.getElementById('qr-total-amount').textContent = `ยอดรวม: ${formatNumber(data.total_amount)} บาท`;
+                })
+                .catch(error => {
+                    console.error('Error fetching billing details:', error);
+                });
+        }
+
+        // --- Slip Upload Form Submission ---
+        const uploadForm = document.getElementById('slip-upload-form');
+        const uploadButton = document.getElementById('upload-button');
+        const uploadStatus = document.getElementById('upload-status');
+
+        uploadForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            
+            const formData = new FormData(uploadForm);
+            
+            uploadButton.disabled = true;
+            uploadButton.textContent = 'กำลังอัปโหลด...';
+            uploadStatus.style.display = 'none';
+
+            fetch('/api/upload-slip', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    uploadStatus.className = 'success';
+                    uploadStatus.textContent = '✔ อัปโหลดสลิปสำเร็จ! กำลังรีเฟรชข้อมูล...';
+                    setTimeout(() => {
+                        fetchDashboardData();
+                        fetchBillingDetails();
+                        uploadForm.reset();
+                    }, 2000);
+                } else {
+                    throw new Error(data.error || 'An unknown error occurred.');
+                }
+            })
+            .catch(error => {
+                uploadStatus.className = 'error';
+                uploadStatus.textContent = `✖ เกิดข้อผิดพลาด: ${error.message}`;
+            })
+            .finally(() => {
+                uploadButton.disabled = false;
+                uploadButton.textContent = 'ยืนยันการชำระเงิน';
+            });
+        });
+
+        // --- Sidebar Navigation ---
+        const sidebarLinks = document.querySelectorAll('.sidebar-menu a[data-target]');
+        const contentPanels = document.querySelectorAll('.main-content .content-panel');
+        const mainTitle = document.getElementById('main-title');
+
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                const targetId = link.getAttribute('data-target');
+                
+                sidebarLinks.forEach(item => item.classList.remove('active'));
+                link.classList.add('active');
+                
+                contentPanels.forEach(panel => panel.classList.remove('active'));
+                const targetPanel = document.getElementById(targetId);
+                if (targetPanel) {
+                    targetPanel.classList.add('active');
+                }
+                
+                mainTitle.textContent = link.querySelector('span').textContent;
+            });
+        });
+
+        // --- Initial Data Fetch ---
+        fetchDashboardData();
+        fetchBillingDetails();
+    });
+    </script>
+</body>
+</html>
