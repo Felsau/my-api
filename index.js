@@ -1,4 +1,3 @@
-// index.js
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const session = require('express-session');
@@ -92,8 +91,10 @@ app.post('/login', (req, res) => {
         }
         if (user && comparePassword(password, user.password)) {
             const { password, ...userData } = user;
+            // Normalize role to lowercase for consistency
+            userData.role = user.role ? user.role.toLowerCase() : '';
             req.session.user = userData;
-            if (user.role === 'owner') {
+            if (userData.role === 'owner') {
                 res.redirect('/owner');
             } else {
                 res.redirect('/tenant');
@@ -213,7 +214,6 @@ app.get('/api/tenant/dashboard', requireLogin, (req, res) => {
 
   Promise.all(dbPromises)
     .then(() => {
-      // If there is a pending payment, update its amount with the calculated total
       if (dashboardData.payment) {
         const totalAmount = room_rent + water_bill + electricity_bill;
         dashboardData.payment.amount = totalAmount;
@@ -288,6 +288,63 @@ app.get('/api/billing-details', requireLogin, (req, res) => {
             console.error('Error fetching billing details:', err);
             res.status(500).json({ error: 'Failed to fetch billing details' });
         });
+});
+
+// --- Get all announcements (tenant view) ---
+app.get('/api/announcements', requireLogin, (req, res) => {
+    const sql = `
+        SELECT id, title, content, target, created_at
+        FROM announcements
+        WHERE target = 'all' OR LOWER(target) = ?
+        ORDER BY created_at DESC`;
+    db.all(sql, [req.session.user.role.toLowerCase()], (err, rows) => {
+        if (err) {
+            console.error('Error fetching announcements:', err);
+            return res.status(500).json({ error: 'Failed to fetch announcements' });
+        }
+        res.json(rows);
+    });
+});
+
+// --- Owner creates a new announcement ---
+app.post('/api/announcements', requireLogin, (req, res) => {
+    if (req.session.user.role !== 'owner') {
+        return res.status(403).json({ error: 'Forbidden' });
+    }
+    const { title, content, target } = req.body;
+    if (!title || !content) {
+        return res.status(400).json({ error: 'Title and content are required.' });
+    }
+    const sql = `INSERT INTO announcements (title, content, target) VALUES (?, ?, ?)`;
+    db.run(sql, [title, content, target ? target.toLowerCase() : 'all'], function(err) {
+        if (err) {
+            console.error('Error inserting announcement:', err);
+            return res.status(500).json({ error: 'Failed to create announcement' });
+        }
+        res.json({ success: true, id: this.lastID });
+    });
+});
+
+app.get('/api/maintenance-requests', requireLogin, (req, res) => {
+    // ตรวจสอบว่าเป็นผู้เช่าหรือไม่
+    if (req.session.user.role !== 'tenant') {
+        return res.status(403).json({ error: 'Forbidden' });
+    }
+
+    const tenantId = req.session.user.id;
+    const sql = `
+        SELECT id, issue_type, details, status, created_at
+        FROM maintenance_requests
+        WHERE tenant_id = ?
+        ORDER BY created_at DESC`; // เรียงลำดับจากล่าสุดไปเก่าสุด
+
+    db.all(sql, [tenantId], (err, rows) => {
+        if (err) {
+            console.error('Error fetching maintenance requests:', err);
+            return res.status(500).json({ error: 'Failed to fetch maintenance requests' });
+        }
+        res.json(rows); // ส่งข้อมูลกลับไปเป็น JSON
+    });
 });
 
 // --- New Route for Slip Upload ---

@@ -95,43 +95,26 @@
         .bank-details-table td:first-child { font-weight: 500; color: var(--text-light); width: 120px;}
 
         /* --- Slip Upload Form Styles --- */
-        #slip-upload-section {
-            margin-top: 2.5rem;
-            border-top: 2px solid var(--border-color);
-            padding-top: 2rem;
-        }
+        #slip-upload-section { margin-top: 2.5rem; border-top: 2px solid var(--border-color); padding-top: 2rem; }
         .form-group { margin-bottom: 1.5rem; }
         .form-group label { display: block; font-weight: 500; margin-bottom: 0.5rem; }
-        .form-group input[type="file"] {
-            display: block;
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background-color: #f9fafb;
-        }
-        .submit-btn {
-            background-color: var(--primary-color);
-            color: #fff;
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
+        .form-group input[type="file"] { display: block; width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: #f9fafb; }
+        .submit-btn { background-color: var(--primary-color); color: #fff; padding: 0.8rem 1.5rem; border: none; border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: background-color 0.2s; }
         .submit-btn:hover { background-color: var(--primary-hover); }
         .submit-btn:disabled { background-color: var(--text-light); cursor: not-allowed; }
-        #upload-status {
-            margin-top: 1rem;
-            font-weight: 500;
-            padding: 0.8rem;
-            border-radius: 8px;
-            display: none;
-        }
+        #upload-status { margin-top: 1rem; font-weight: 500; padding: 0.8rem; border-radius: 8px; display: none; }
         #upload-status.success { background-color: #d1fae5; color: #065f46; display: block; }
         #upload-status.error { background-color: #fee2e2; color: #991b1b; display: block; }
+        .error-message { text-align: center; padding: 2rem; background-color: #fee2e2; color: #991b1b; border-radius: 8px; font-weight: 500; }
+
+        .panel-card h3 { font-size: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+        .repair-list { display: flex; flex-direction: column; gap: 1rem; }
+        .repair-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: #fff; }
+        .repair-details h4 { font-size: 1.1rem; font-weight: 600; margin: 0 0 0.25rem 0; }
+        .repair-description { font-size: 0.9rem; color: var(--text-light); margin: 0; }
+        .repair-status { padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500; color: #fff; white-space: nowrap; }
+        .status-completed { background-color: var(--success-color); }
+        .status-in-progress { background-color: var(--info-color); }
     </style>
 </head>
 <body>
@@ -147,14 +130,14 @@
             <ul class="sidebar-menu">
                 <li><a href="#" class="active" data-target="overview-panel"><i class="fa-solid fa-table-columns"></i> <span>ภาพรวม</span></a></li>
                 <li><a href="#" data-target="payments-panel"><i class="fa-solid fa-file-invoice-dollar"></i> <span>การชำระเงิน</span></a></li>
-                <li><a href="#"><i class="fa-solid fa-bullhorn"></i> <span>ประกาศ</span><span class="notification-badge">1</span></a></li>
-                <li><a href="#"><i class="fa-solid fa-screwdriver-wrench"></i> <span>แจ้งซ่อม</span></a></li>
-                <li><a href="#"><i class="fa-solid fa-file-signature"></i> <span>สัญญาเช่า</span></a></li>
-                <li><a href="#"><i class="fa-solid fa-scroll"></i> <span>กฎระเบียบ</span></a></li>
-                <li><a href="#"><i class="fa-solid fa-calendar-days"></i> <span>ปฏิทิน</span></a></li>
-                <li><a href="#"><i class="fa-solid fa-address-book"></i> <span>ติดต่อเจ้าของ</span></a></li>
-                <li><a href="#"><i class="fa-solid fa-right-from-bracket"></i> <span>แจ้งย้ายออก</span></a></li>
-                <li><a href="#"><i class="fa-solid fa-user-circle"></i> <span>ข้อมูลส่วนตัว</span></a></li>
+                <li><a href="#" data-target="announcements-panel"><i class="fa-solid fa-bullhorn"></i> <span>ประกาศ</span><span class="notification-badge">1</span></a></li>
+                <li><a href="#" data-target="repairs-panel"><i class="fa-solid fa-screwdriver-wrench"></i> <span>แจ้งซ่อม</span></a></li>
+                <li><a href="#" data-target="contract-panel"><i class="fa-solid fa-file-signature"></i> <span>สัญญาเช่า</span></a></li>
+                <li><a href="#" data-target="rules-panel"><i class="fa-solid fa-scroll"></i> <span>กฎระเบียบ</span></a></li>
+                <li><a href="#" data-target="calendar-panel"><i class="fa-solid fa-calendar-days"></i> <span>ปฏิทิน</span></a></li>
+                <li><a href="#" data-target="contact-panel"><i class="fa-solid fa-address-book"></i> <span>ติดต่อเจ้าของ</span></a></li>
+                <li><a href="#" data-target="moveout-panel"><i class="fa-solid fa-right-from-bracket"></i> <span>แจ้งย้ายออก</span></a></li>
+                <li><a href="#" data-target="profile-panel"><i class="fa-solid fa-user-circle"></i> <span>ข้อมูลส่วนตัว</span></a></li>
             </ul>
             <div class="sidebar-footer">
                 <a href="/logout" class="logout-button">
@@ -240,7 +223,7 @@
 
                     <div class="qr-code-container">
                         <p>สแกน QR Code นี้เพื่อชำระเงิน</p>
-                        <img id="qr-code-img" src="" alt="QR Code for Payment" class="qr-code-img">
+                        <img id="qr-code-img" src="#" alt="QR Code for Payment" class="qr-code-img" style="visibility: hidden;">
                         <div class="total-amount" id="qr-total-amount"></div>
                     </div>
 
@@ -279,7 +262,30 @@
                 </div>
             </section>
 
-        </main>
+            <section id="announcements-panel" class="content-panel">
+                <div class="panel-card">
+                    <h2><i class="fa-solid fa-bullhorn"></i> ประกาศและข่าวสาร</h2>
+                    <ul id="announcements-list" class="reminders-list">
+                        <li class="info">
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+                            <div><span class="description">กำลังโหลดข้อมูล...</span></div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="repairs-panel" class="content-panel">
+                <div class="panel-card">
+                    <h3><i class="fa-solid fa-list-check"></i> ติดตามสถานะการแจ้งซ่อม</h3>
+                    <div class="repair-list">
+                        </div>
+                </div>
+            </section>
+
+
+
+
+
     </div>
 
     <script>
@@ -330,8 +336,100 @@
                 })
                 .catch(error => {
                     console.error('Error fetching dashboard data:', error);
+                    document.getElementById('overview-panel').innerHTML = `<p class="error-message">ไม่สามารถโหลดข้อมูลภาพรวมได้</p>`;
                 });
         }
+
+        function fetchAnnouncements() {
+            fetch('/api/announcements')
+                .then(res => res.json())
+                .then(data => {
+                    const list = document.getElementById('announcements-list');
+                    list.innerHTML = '';
+                    if (data.length === 0) {
+                        list.innerHTML = `<li class="info"><i class="fa-solid fa-circle-check"></i>
+                            <div><span class="description">ยังไม่มีประกาศ</span></div></li>`;
+                    } else {
+                        data.forEach(item => {
+                            const date = new Date(item.created_at);
+                            list.innerHTML += `
+                                <li class="info">
+                                    <i class="fa-solid fa-bullhorn"></i>
+                                    <div>
+                                        <strong>${item.title}</strong><br>
+                                        <span class="description">${item.content}</span><br>
+                                        <small>${date.toLocaleDateString('th-TH')}</small>
+                                    </div>
+                                </li>`;
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error('Error fetching announcements:', err);
+                    // IMPROVEMENT: Added user-facing error message
+                    const list = document.getElementById('announcements-list');
+                    list.innerHTML = `<li class="rent-due"><i class="fa-solid fa-triangle-exclamation"></i>
+                        <div><span class="description">เกิดข้อผิดพลาด: ไม่สามารถโหลดประกาศได้</span></div></li>`;
+                });
+        }
+
+        function formatStatus(status) {
+    switch (status) {
+        case 'pending':
+            return { text: 'รอดำเนินการ', class: 'status-pending' };
+        case 'in_progress':
+            return { text: 'กำลังดำเนินการ', class: 'status-in-progress' };
+        case 'completed':
+            return { text: 'เสร็จสิ้น', class: 'status-completed' };
+        default:
+            return { text: status, class: '' };
+    }
+}
+
+        function loadRepairs() {
+        const repairListContainer = document.querySelector('#repairs-panel .repair-list');
+        repairListContainer.innerHTML = '<p>กำลังโหลดข้อมูล...</p>'; // แสดงข้อความระหว่างโหลด
+
+        fetch('/api/maintenance-requests')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(repairs => {
+                repairListContainer.innerHTML = ''; // ล้างข้อมูลเก่าออก
+
+                if (repairs.length === 0) {
+                    repairListContainer.innerHTML = '<p>ยังไม่มีรายการแจ้งซ่อม</p>';
+                    return;
+                }
+
+                repairs.forEach(repair => {
+                    const statusInfo = formatStatus(repair.status);
+
+                    // สร้าง HTML element สำหรับแต่ละรายการ
+                    const repairItem = `
+                        <div class="repair-item">
+                            <div class="repair-details">
+                                <h4>${repair.issue_type}</h4>
+                                <p class="repair-description">${repair.details || 'ไม่มีรายละเอียดเพิ่มเติม'}</p>
+                            </div>
+                            <span class="repair-status ${statusInfo.class}">${statusInfo.text}</span>
+                        </div>
+                    `;
+                    // นำ element ที่สร้างไปต่อท้ายใน container
+                    repairListContainer.insertAdjacentHTML('beforeend', repairItem);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching repair data:', error);
+                repairListContainer.innerHTML = '<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
+            });
+        }
+
+        
+        
 
         function fetchBillingDetails() {
             fetch('/api/billing-details')
@@ -350,12 +448,17 @@
 
                     const totalAmountForQR = data.total_amount.toFixed(2);
                     const promptPayId = '0999999999';
+                    const qrImg = document.getElementById('qr-code-img');
                     
-                    document.getElementById('qr-code-img').src = `https://promptpay.io/${promptPayId}/${totalAmountForQR}.png`;
+                    qrImg.src = `https://promptpay.io/${promptPayId}/${totalAmountForQR}.png`;
+                    qrImg.style.visibility = 'visible'; // Make QR code visible after loading
                     document.getElementById('qr-total-amount').textContent = `ยอดรวม: ${formatNumber(data.total_amount)} บาท`;
                 })
                 .catch(error => {
                     console.error('Error fetching billing details:', error);
+                    // IMPROVEMENT: Added user-facing error message
+                    const paymentsPanel = document.getElementById('payments-panel');
+                    paymentsPanel.innerHTML = `<p class="error-message">เกิดข้อผิดพลาด: ไม่สามารถโหลดข้อมูลการชำระเงินได้</p>`;
                 });
         }
 
@@ -386,6 +489,7 @@
                         fetchDashboardData();
                         fetchBillingDetails();
                         uploadForm.reset();
+                        uploadStatus.style.display = 'none';
                     }, 2000);
                 } else {
                     throw new Error(data.error || 'An unknown error occurred.');
@@ -427,6 +531,8 @@
         // --- Initial Data Fetch ---
         fetchDashboardData();
         fetchBillingDetails();
+        fetchAnnouncements();
+        document.addEventListener('DOMContentLoaded', loadRepairs);
     });
     </script>
 </body>
