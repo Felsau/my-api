@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tenant Dashboard</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
@@ -118,65 +120,118 @@
 
         /* ========== New Repair Form Styles ========== */
 
-        .repair-form {
+        .repair-form { display: flex; flex-direction: column; }
+        .form-group { margin-bottom: 1.5rem; display: flex; flex-direction: column; }
+        .form-group label { margin-bottom: 0.5rem; font-weight: 600; color: #333; }
+        .form-group select, .form-group textarea { width: 100%; padding: 0.8rem 1rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; font-family: inherit; background-color: #fff; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
+        .form-group select { background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 0.65em auto; padding-right: 2.5rem; }
+        .form-group textarea { resize: vertical; }
+        .submit-btn { align-self: flex-start; padding: 0.75rem 1.5rem; background-color: #6d28d9; color: #fff; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s ease; }
+        .submit-btn:hover { background-color: #5b21b6; }
+        .status-badge { display: inline-block; padding: 6px 18px; font-size: 14px; font-weight: bold; color: #ffffff; border-radius: 9999px; text-align: center; white-space: nowrap; }
+        .status-pending { background-color: #ff5656; }
+        .status-in-progress { background-color: #f39c12; }
+        .status-completed { background-color: #27ae60; }
+
+        /* === Contract Panel Styles === */
+        .contract-card {
+            background-color: #ffffff;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .contract-header h2 {
+            margin-top: 0;
+            margin-bottom: 24px;
+            font-size: 1.2rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .contract-header h2 i {
+            margin-right: 10px;
+            color: #555;
+        }
+
+        .contract-info-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            padding-bottom: 24px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .contract-info-item {
             display: flex;
             flex-direction: column;
         }
 
-        .form-group {
-            margin-bottom: 1.5rem;
-            display: flex;
-            flex-direction: column;
+        .contract-info-item .label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 4px;
         }
 
-        .form-group label {
-            margin-bottom: 0.5rem;
-            font-weight: 600;
+        .contract-info-item .value {
+            font-size: 1rem;
+            font-weight: 500;
             color: #333;
         }
 
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 1px solid #ddd; /* หรือ var(--border-color) ถ้ามี */
-            border-radius: 8px;
-            font-size: 1rem;
-            font-family: inherit; /* ทำให้ฟอนต์เหมือนกับส่วนอื่นๆ */
-            background-color: #fff;
-            -webkit-appearance: none; /* สำหรับ Safari/Chrome */
-            -moz-appearance: none; /* สำหรับ Firefox */
-            appearance: none; /* ซ่อนลูกศร dropdown เริ่มต้น */
+        .contract-actions {
+            text-align: left;
         }
 
-        /* เพิ่มลูกศร dropdown เองเพื่อให้สวยงาม */
-        .form-group select {
-            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 0.65em auto;
-            padding-right: 2.5rem; /* เพิ่มพื้นที่สำหรับลูกศร */
-        }
-
-        .form-group textarea {
-            resize: vertical; /* อนุญาตให้ผู้ใช้ปรับขนาดแนวตั้งได้ */
-        }
-
-        .submit-btn {
-            align-self: flex-start; /* จัดปุ่มไปทางซ้าย */
-            padding: 0.75rem 1.5rem;
-            background-color: #6d28d9; /* สีม่วงเข้ม */
-            color: #fff;
+        .download-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #6200ea; /* Purple color */
+            color: #ffffff;
+            padding: 12px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
             border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.3s ease;
         }
 
-        .submit-btn:hover {
-            background-color: #5b21b6; /* สีม่วงเข้มขึ้นเมื่อ hover */
+        .download-button:hover {
+            background-color: #5100c6; /* Darker purple on hover */
+        }
+
+        .download-button i {
+            margin-right: 8px;
+        }
+
+        /* === Rules Panel Styles (เพิมใหม่) === */
+        .rules-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 1.5rem;
+        }
+        .rules-list li {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 1rem;
+        }
+        .rules-list li:last-child {
+            border-bottom: none;
+        }
+        .rules-list i {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            width: 25px;
+            text-align: center;
         }
     </style>
 </head>
@@ -220,29 +275,29 @@
                 <div class="overview-cards">
                     <div class="card">
                         <div class="card-header">
-                             <div class="card-icon"><i class="fa-solid fa-wallet"></i></div>
-                             <div class="card-content">
-                                 <h3>ยอดชำระเดือนนี้</h3>
-                                 <p id="overview-amount">-,--- บาท</p>
-                             </div>
+                            <div class="card-icon"><i class="fa-solid fa-wallet"></i></div>
+                            <div class="card-content">
+                                <h3>ยอดชำระเดือนนี้</h3>
+                                <p id="overview-amount">-,--- บาท</p>
+                            </div>
                         </div>
                     </div>
                     <div class="card">
-                         <div class="card-header">
-                             <div class="card-icon"><i class="fa-solid fa-calendar-check"></i></div>
-                             <div class="card-content">
-                                 <h3>กำหนดชำระ</h3>
-                                 <p id="overview-due-date">--/--/----</p>
-                             </div>
+                        <div class="card-header">
+                            <div class="card-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                            <div class="card-content">
+                                <h3>กำหนดชำระ</h3>
+                                <p id="overview-due-date">--/--/----</p>
+                            </div>
                         </div>
                     </div>
                     <div class="card">
-                         <div class="card-header">
-                             <div class="card-icon"><i class="fa-solid fa-wrench"></i></div>
-                             <div class="card-content">
-                                 <h3>รายการแจ้งซ่อม</h3>
-                                 <p id="overview-maintenance-count">- รายการ</p>
-                             </div>
+                        <div class="card-header">
+                            <div class="card-icon"><i class="fa-solid fa-wrench"></i></div>
+                            <div class="card-content">
+                                <h3>รายการแจ้งซ่อม</h3>
+                                <p id="overview-maintenance-count">- รายการ</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -250,12 +305,12 @@
                 <div class="panel-card">
                     <h2><i class="fa-solid fa-bell"></i>การแจ้งเตือนและนัดหมายเร็วๆ นี้</h2>
                     <ul class="reminders-list" id="reminders-list">
-                         <li class="info">
-                             <i class="fa-solid fa-spinner fa-spin"></i>
-                             <div>
-                                 <span class="description">กำลังโหลดข้อมูล...</span>
-                             </div>
-                         </li>
+                        <li class="info">
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+                            <div>
+                                <span class="description">กำลังโหลดข้อมูล...</span>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </section>
@@ -336,45 +391,96 @@
                     </ul>
                 </div>
             </section>
-<section id="repairs-panel" class="content-panel">
 
-    <div class="panel-card">
-        <h3><i class="fa-solid fa-circle-plus"></i> แจ้งเรื่องซ่อมใหม่</h3>
-        <form id="new-repair-form" class="repair-form">
-            <div class="form-group">
-                <label for="problem-type">ประเภทปัญหา</label>
-                <select id="problem-type" name="problem-type" required>
-                    <option value="" disabled selected>-- เลือก --</option>
-                    <option value="ปัญหาน้ำประปา">ปัญหาน้ำประปา</option>
-                    <option value="ปัญหาไฟฟ้า">ปัญหาไฟฟ้า</option>
-                    <option value="ปัญหาอินเทอร์เน็ต">ปัญหาอินเทอร์เน็ต</option>
-                    <option value="ปัญหาเครื่องปรับอากาศ">ปัญหาเครื่องปรับอากาศ</option>
-                    <option value="อื่นๆ">อื่นๆ</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="problem-details">รายละเอียด</label>
-                <textarea id="problem-details" name="problem-details" rows="5" placeholder="กรุณาอธิบายปัญหาโดยละเอียด..." required></textarea>
-            </div>
-            <button type="submit" class="submit-btn">ส่งเรื่อง</button>
-        </form>
-    </div>
+            <section id="repairs-panel" class="content-panel">
+                <div class="panel-card">
+                    <h3><i class="fa-solid fa-circle-plus"></i> แจ้งเรื่องซ่อมใหม่</h3>
+                    <form id="new-repair-form" class="repair-form">
+                        <div class="form-group">
+                            <label for="problem-type">ประเภทปัญหา</label>
+                            <select id="problem-type" name="problem-type" required>
+                                <option value="" disabled selected>-- เลือก --</option>
+                                <option value="ปัญหาน้ำประปา">ปัญหาน้ำประปา</option>
+                                <option value="ปัญหาไฟฟ้า">ปัญหาไฟฟ้า</option>
+                                <option value="ปัญหาอินเทอร์เน็ต">ปัญหาอินเทอร์เน็ต</option>
+                                <option value="ปัญหาเครื่องปรับอากาศ">ปัญหาเครื่องปรับอากาศ</option>
+                                <option value="อื่นๆ">อื่นๆ</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="problem-details">รายละเอียด</label>
+                            <textarea id="problem-details" name="problem-details" rows="5" placeholder="กรุณาอธิบายปัญหาโดยละเอียด..." required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">ส่งเรื่อง</button>
+                    </form>
+                </div>
 
-    <div class="panel-card">
-        <h3><i class="fa-solid fa-list-check"></i> ติดตามสถานะการแจ้งซ่อม</h3>
-        <div class="repair-list">
-            </div>
-    </div>
+                <div class="panel-card">
+                    <h3><i class="fa-solid fa-list-check"></i> ติดตามสถานะการแจ้งซ่อม</h3>
+                    <div class="repair-list"></div>
+                </div>
+            </section>
+            
+            <section id="contract-panel" class="content-panel">
+                <div class="panel-card contract-card">
+                    <div class="contract-header">
+                        <h2><i class="fa-solid fa-file-signature"></i> สัญญาเช่าของคุณ</h2>
+                    </div>
+                    <div class="contract-info-wrapper">
+                        <div class="contract-info-item">
+                            <span class="label">ผู้เช่า:</span>
+                            <span class="value" id="contract-tenant-name">กำลังโหลด...</span>
+                        </div>
+                        <div class="contract-info-item">
+                            <span class="label">ห้อง:</span>
+                            <span class="value" id="contract-room-number">...</span>
+                        </div>
+                        <div class="contract-info-item">
+                            <span class="label">วันเริ่มสัญญา:</span>
+                            <span class="value" id="contract-start-date">...</span>
+                        </div>
+                        <div class="contract-info-item">
+                            <span class="label">วันสิ้นสุดสัญญา:</span>
+                            <span class="value" id="contract-end-date">...</span>
+                        </div>
+                        <div class="contract-info-item">
+                            <span class="label">อัตราค่าเช่า:</span>
+                            <span class="value" id="contract-rent-rate">...</span>
+                        </div>
+                    </div>
+                    <div class="contract-actions">
+                        <a href="#" id="download-contract-link" class="download-button" style="display: none;">
+                            <i class="fa-solid fa-download"></i>
+                            <span>ดาวน์โหลดสัญญา (PDF)</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="rules-panel" class="content-panel">
+                <div class="panel-card">
+                    <h2><i class="fa-solid fa-scroll"></i> กฎระเบียบและข้อบังคับของหอพัก</h2>
+                    <ul class="rules-list">
+                        <li><i class="fa-solid fa-broom"></i><span>โปรดรักษาความสะอาดบริเวณข้างห้องพักและพื้นที่ส่วนกลาง</span></li>
+                        <li><i class="fa-solid fa-volume-xmark"></i><span>งดส่งเสียงดังรบกวนผู้อื่นหลังเวลา 22:00 น.</span></li>
+                        <li><i class="fa-solid fa-smoking-ban"></i><span>ห้ามสูบบุหรี่ภายในตัวอาคารโดยเด็ดขาด</span></li>
+                        <li><i class="fa-solid fa-user-slash"></i><span>ห้ามนำบุคคลภายนอกที่ไม่ได้รับอนุญาตเข้าพักค้างคืน</span></li>
+                        <li><i class="fa-solid fa-paw"></i><span>ไม่อนุญาตให้เลี้ยงสัตว์เลี้ยงทุกชนิด</span></li>
+                        <li><i class="fa-solid fa-fire-burner"></i><span>ห้ามประกอบอาหารที่ทำให้เกิดควันรบกวน และห้ามใช้แก๊สในการปรุงอาหารในห้องพัก</span></li>
+                        <li><i class="fa-solid fa-trash-can"></i><span>โปรดทิ้งขยะในบริเวณที่จัดเตรียมไว้ให้ และคัดแยกขยะตามที่กำหนด</span></li>
+                        <li><i class="fa-solid fa-lock"></i><span>โปรดล็อคห้องทุกครั้งเมื่อไม่อยู่ เพื่อความปลอดภัยในทรัพย์สินของท่าน</span></li>
+                    </ul>
+                </div>
+            </section>
 
-</section>
-    
-    </div>
-</section>
+        </main>
     </div>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         let currentPaymentId = null;
+
+        // --- Data Fetching Functions ---
 
         function fetchDashboardData() {
             fetch('/api/tenant/dashboard')
@@ -386,7 +492,7 @@
                     return response.json();
                 })
                 .then(data => {
-                    document.getElementById('welcome-message').textContent = data.userInfo && data.userInfo.name ? `สวัสดี, ${data.userInfo.name}` : 'ยินดีต้อนรับ';
+                    document.getElementById('welcome-message').textContent = data.userInfo?.name ? `สวัสดี, ${data.userInfo.name}` : 'ยินดีต้อนรับ';
                     
                     if (data.payment) {
                         currentPaymentId = data.payment.id;
@@ -398,10 +504,10 @@
                     } else {
                         document.getElementById('overview-amount').textContent = '0 บาท';
                         document.getElementById('overview-due-date').textContent = 'ไม่มี';
-                        document.getElementById('slip-upload-section').style.display = 'none'; // ซ่อนฟอร์มอัปโหลดถ้าไม่มีบิล
+                        document.getElementById('slip-upload-section').style.display = 'none';
                     }
 
-                    document.getElementById('overview-maintenance-count').textContent = data.maintenance && data.maintenance.count > 0 ? `${data.maintenance.count} รายการ` : '0 รายการ';
+                    document.getElementById('overview-maintenance-count').textContent = data.maintenance?.count > 0 ? `${data.maintenance.count} รายการ` : '0 รายการ';
                     
                     const remindersList = document.getElementById('reminders-list');
                     remindersList.innerHTML = '';
@@ -424,8 +530,6 @@
                 });
         }
 
-        
-
         function fetchAnnouncements() {
             fetch('/api/announcements')
                 .then(res => res.json())
@@ -433,8 +537,7 @@
                     const list = document.getElementById('announcements-list');
                     list.innerHTML = '';
                     if (data.length === 0) {
-                        list.innerHTML = `<li class="info"><i class="fa-solid fa-circle-check"></i>
-                            <div><span class="description">ยังไม่มีประกาศ</span></div></li>`;
+                        list.innerHTML = `<li class="info"><i class="fa-solid fa-circle-check"></i><div><span class="description">ยังไม่มีประกาศ</span></div></li>`;
                     } else {
                         data.forEach(item => {
                             const date = new Date(item.created_at);
@@ -452,130 +555,82 @@
                 })
                 .catch(err => {
                     console.error('Error fetching announcements:', err);
-                    // IMPROVEMENT: Added user-facing error message
                     const list = document.getElementById('announcements-list');
-                    list.innerHTML = `<li class="rent-due"><i class="fa-solid fa-triangle-exclamation"></i>
-                        <div><span class="description">เกิดข้อผิดพลาด: ไม่สามารถโหลดประกาศได้</span></div></li>`;
+                    list.innerHTML = `<li class="rent-due"><i class="fa-solid fa-triangle-exclamation"></i><div><span class="description">เกิดข้อผิดพลาด: ไม่สามารถโหลดประกาศได้</span></div></li>`;
                 });
         }
-
-        function formatStatus(status) {
-    switch (status) {
-        case 'pending':
-            return { text: 'รอดำเนินการ', class: 'status-pending' };
-        case 'in_progress':
-            return { text: 'กำลังดำเนินการ', class: 'status-in-progress' };
-        case 'completed':
-            return { text: 'เสร็จสิ้น', class: 'status-completed' };
-        default:
-            return { text: status, class: '' };
-    }
-}
 
         function loadRepairs() {
-        const repairListContainer = document.querySelector('#repairs-panel .repair-list');
-        repairListContainer.innerHTML = '<p>กำลังโหลดข้อมูล...</p>'; // แสดงข้อความระหว่างโหลด
+            const repairListContainer = document.querySelector('#repairs-panel .repair-list');
+            repairListContainer.innerHTML = '<p>กำลังโหลดข้อมูล...</p>';
 
-        fetch('/api/maintenance-requests')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(repairs => {
-                repairListContainer.innerHTML = ''; // ล้างข้อมูลเก่าออก
+            fetch('/api/maintenance-requests')
+                .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
+                .then(repairs => {
+                    repairListContainer.innerHTML = ''; 
 
-                if (repairs.length === 0) {
-                    repairListContainer.innerHTML = '<p>ยังไม่มีรายการแจ้งซ่อม</p>';
-                    return;
-                }
+                    if (repairs.length === 0) {
+                        repairListContainer.innerHTML = '<p>ยังไม่มีรายการแจ้งซ่อม</p>';
+                        return;
+                    }
 
-                repairs.forEach(repair => {
-                    const statusInfo = formatStatus(repair.status);
+                    const formatStatus = (status) => {
+                        switch (status) {
+                            case 'pending': return { text: 'รอดำเนินการ', class: 'status-pending' };
+                            case 'in_progress': return { text: 'กำลังดำเนินการ', class: 'status-in-progress' };
+                            case 'completed': return { text: 'เสร็จสิ้น', class: 'status-completed' };
+                            default: return { text: status, class: '' };
+                        }
+                    };
 
-                    // สร้าง HTML element สำหรับแต่ละรายการ
-                    const repairItem = `
-                        <div class="repair-item">
-                            <div class="repair-details">
-                                <h4>${repair.issue_type}</h4>
-                                <p class="repair-description">${repair.details || 'ไม่มีรายละเอียดเพิ่มเติม'}</p>
-                            </div>
-                            <span class="repair-status ${statusInfo.class}">${statusInfo.text}</span>
-                        </div>
-                    `;
-                    // นำ element ที่สร้างไปต่อท้ายใน container
-                    repairListContainer.insertAdjacentHTML('beforeend', repairItem);
+                    repairs.forEach(repair => {
+                        const statusInfo = formatStatus(repair.status);
+                        const repairItemHTML = `
+                            <div class="repair-item">
+                                <div class="repair-details">
+                                    <h4>${repair.issue_type}</h4>
+                                    <p class="repair-description">${repair.details || 'ไม่มีรายละเอียดเพิ่มเติม'}</p>
+                                </div>
+                                <span class="repair-status ${statusInfo.class}">${statusInfo.text}</span>
+                            </div>`;
+                        repairListContainer.insertAdjacentHTML('beforeend', repairItemHTML);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching repair data:', error);
+                    repairListContainer.innerHTML = '<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
                 });
-            })
-            .catch(error => {
-                console.error('Error fetching repair data:', error);
-                repairListContainer.innerHTML = '<p>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
-            });
         }
 
+        function fetchContractDetails() {
+            fetch('/api/contract-details')
+                .then(response => response.ok ? response.json() : Promise.reject('ไม่สามารถโหลดข้อมูลสัญญาได้'))
+                .then(data => {
+                    const formatDate = (dateString) => new Date(dateString).toLocaleDateString('th-TH', {
+                        year: 'numeric', month: 'long', day: 'numeric'
+                    });
+
+                    document.getElementById('contract-tenant-name').textContent = data.tenant_name || 'N/A';
+                    document.getElementById('contract-room-number').textContent = data.room_number || 'N/A';
+                    document.getElementById('contract-start-date').textContent = formatDate(data.start_date);
+                    document.getElementById('contract-end-date').textContent = formatDate(data.end_date);
+                    document.getElementById('contract-rent-rate').textContent = `${(data.rent_rate || 0).toLocaleString()} บาท/เดือน`;
+
+                    const downloadLink = document.getElementById('download-contract-link');
+                    if (data.contract_url) {
+                        downloadLink.href = data.contract_url;
+                        downloadLink.style.display = 'inline-flex';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching contract details:', error);
+                    document.getElementById('contract-panel').innerHTML = `<div class="panel-card"><p class="error-message">เกิดข้อผิดพลาด: ${error.message}</p></div>`;
+                });
+        }
         
-        function handleNewRepairSubmit() {
-        const newRepairForm = document.getElementById('new-repair-form');
-        if (!newRepairForm) return;
-
-        newRepairForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // ป้องกันการรีโหลดหน้าเว็บ
-
-            const submitBtn = this.querySelector('.submit-btn');
-            const originalBtnText = submitBtn.textContent;
-            
-            // ดึงข้อมูลจากฟอร์ม
-            const formData = new FormData(this);
-            const data = {
-                'problem-type': formData.get('problem-type'),
-                'problem-details': formData.get('problem-details')
-            };
-            
-            // แสดงสถานะกำลังส่ง
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'กำลังส่ง...';
-
-            // ส่งข้อมูลไปยัง Backend API
-            fetch('/api/maintenance-requests', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => {
-                if (!response.ok) {
-                     // หากเกิดข้อผิดพลาดจาก Server ให้โยน Error
-                    return response.json().then(err => { throw new Error(err.error || 'เกิดข้อผิดพลาดบางอย่าง'); });
-                }
-                return response.json();
-            })
-            .then(result => {
-                if (result.success) {
-                    alert('แจ้งซ่อมสำเร็จ!'); // แสดงข้อความแจ้งเตือน
-                    newRepairForm.reset(); // ล้างฟอร์ม
-                    loadRepairs(); // โหลดรายการแจ้งซ่อมใหม่ เพื่อให้แสดงรายการล่าสุด
-                }
-            })
-            .catch(error => {
-                console.error('Error submitting repair request:', error);
-                alert(`เกิดข้อผิดพลาด: ${error.message}`); // แสดงข้อความ Error
-            })
-            .finally(() => {
-                // คืนค่าปุ่มให้เป็นปกติ
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalBtnText;
-            });
-        });
-    }
-
         function fetchBillingDetails() {
             fetch('/api/billing-details')
-                .then(response => {
-                    if (!response.ok) throw new Error('Could not fetch billing details');
-                    return response.json();
-                })
+                .then(response => response.ok ? response.json() : Promise.reject('Could not fetch billing details'))
                 .then(data => {
                     const formatNumber = (num) => num.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                     const formatInteger = (num) => num.toLocaleString('th-TH');
@@ -590,89 +645,134 @@
                     const qrImg = document.getElementById('qr-code-img');
                     
                     qrImg.src = `https://promptpay.io/${promptPayId}/${totalAmountForQR}.png`;
-                    qrImg.style.visibility = 'visible'; // Make QR code visible after loading
+                    qrImg.style.visibility = 'visible';
                     document.getElementById('qr-total-amount').textContent = `ยอดรวม: ${formatNumber(data.total_amount)} บาท`;
                 })
                 .catch(error => {
                     console.error('Error fetching billing details:', error);
-                    // IMPROVEMENT: Added user-facing error message
-                    const paymentsPanel = document.getElementById('payments-panel');
-                    paymentsPanel.innerHTML = `<p class="error-message">เกิดข้อผิดพลาด: ไม่สามารถโหลดข้อมูลการชำระเงินได้</p>`;
+                    document.getElementById('payments-panel').innerHTML = `<p class="error-message">เกิดข้อผิดพลาด: ไม่สามารถโหลดข้อมูลการชำระเงินได้</p>`;
                 });
         }
 
-        // --- Slip Upload Form Submission ---
-        const uploadForm = document.getElementById('slip-upload-form');
-        const uploadButton = document.getElementById('upload-button');
-        const uploadStatus = document.getElementById('upload-status');
+        // --- Event Handlers ---
 
-        uploadForm.addEventListener('submit', (event) => {
-            event.preventDefault();
-            
-            const formData = new FormData(uploadForm);
-            
-            uploadButton.disabled = true;
-            uploadButton.textContent = 'กำลังอัปโหลด...';
-            uploadStatus.style.display = 'none';
+        function handleNewRepairSubmit() {
+            const form = document.getElementById('new-repair-form');
+            if (!form) return;
 
-            fetch('/api/upload-slip', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    uploadStatus.className = 'success';
-                    uploadStatus.textContent = '✔ อัปโหลดสลิปสำเร็จ! กำลังรีเฟรชข้อมูล...';
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const submitBtn = this.querySelector('.submit-btn');
+                const originalBtnText = submitBtn.textContent;
+                
+                const formData = {
+                    'problem-type': this.querySelector('#problem-type').value,
+                    'problem-details': this.querySelector('#problem-details').value
+                };
+                
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'กำลังส่ง...';
+
+                fetch('/api/maintenance-requests', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => response.json().then(data => ({ ok: response.ok, data })))
+                .then(({ ok, data }) => {
+                    if (!ok) throw new Error(data.error || 'เกิดข้อผิดพลาดบางอย่าง');
+                    alert('แจ้งซ่อมสำเร็จ!');
+                    form.reset();
+                    loadRepairs();
+                })
+                .catch(error => {
+                    console.error('Error submitting repair request:', error);
+                    alert(`เกิดข้อผิดพลาด: ${error.message}`);
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalBtnText;
+                });
+            });
+        }
+
+        function handleSlipUpload() {
+            const form = document.getElementById('slip-upload-form');
+            if (!form) return;
+
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const button = document.getElementById('upload-button');
+                const statusDiv = document.getElementById('upload-status');
+                const formData = new FormData(form);
+                
+                button.disabled = true;
+                button.textContent = 'กำลังอัปโหลด...';
+                statusDiv.style.display = 'none';
+
+                fetch('/api/upload-slip', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) throw new Error(data.error || 'An unknown error occurred.');
+                    
+                    statusDiv.className = 'success';
+                    statusDiv.textContent = '✔ อัปโหลดสลิปสำเร็จ! กำลังรีเฟรชข้อมูล...';
                     setTimeout(() => {
                         fetchDashboardData();
                         fetchBillingDetails();
-                        uploadForm.reset();
-                        uploadStatus.style.display = 'none';
+                        form.reset();
+                        statusDiv.style.display = 'none';
                     }, 2000);
-                } else {
-                    throw new Error(data.error || 'An unknown error occurred.');
-                }
-            })
-            .catch(error => {
-                uploadStatus.className = 'error';
-                uploadStatus.textContent = `✖ เกิดข้อผิดพลาด: ${error.message}`;
-            })
-            .finally(() => {
-                uploadButton.disabled = false;
-                uploadButton.textContent = 'ยืนยันการชำระเงิน';
+                })
+                .catch(error => {
+                    statusDiv.className = 'error';
+                    statusDiv.textContent = `✖ เกิดข้อผิดพลาด: ${error.message}`;
+                })
+                .finally(() => {
+                    button.disabled = false;
+                    button.textContent = 'ยืนยันการชำระเงิน';
+                });
             });
-        });
+        }
 
-        // --- Sidebar Navigation ---
-        const sidebarLinks = document.querySelectorAll('.sidebar-menu a[data-target]');
-        const contentPanels = document.querySelectorAll('.main-content .content-panel');
-        const mainTitle = document.getElementById('main-title');
+        function setupSidebarNavigation() {
+            const sidebarLinks = document.querySelectorAll('.sidebar-menu a[data-target]');
+            const contentPanels = document.querySelectorAll('.main-content .content-panel');
+            const mainTitle = document.getElementById('main-title');
 
-        sidebarLinks.forEach(link => {
-            link.addEventListener('click', (event) => {
-                event.preventDefault();
-                const targetId = link.getAttribute('data-target');
-                
-                sidebarLinks.forEach(item => item.classList.remove('active'));
-                link.classList.add('active');
-                
-                contentPanels.forEach(panel => panel.classList.remove('active'));
-                const targetPanel = document.getElementById(targetId);
-                if (targetPanel) {
-                    targetPanel.classList.add('active');
-                }
-                
-                mainTitle.textContent = link.querySelector('span').textContent;
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const targetId = link.getAttribute('data-target');
+                    
+                    sidebarLinks.forEach(item => item.classList.remove('active'));
+                    link.classList.add('active');
+                    
+                    contentPanels.forEach(panel => panel.classList.remove('active'));
+                    const targetPanel = document.getElementById(targetId);
+                    if (targetPanel) {
+                        targetPanel.classList.add('active');
+                    }
+                    
+                    mainTitle.textContent = link.querySelector('span').textContent;
+                });
             });
-        });
+        }
 
-        // --- Initial Data Fetch ---
+        // --- Initialisation ---
+        
+        setupSidebarNavigation();
+        handleNewRepairSubmit();
+        handleSlipUpload();
+
         fetchDashboardData();
         fetchBillingDetails();
         fetchAnnouncements();
         loadRepairs();
-        handleNewRepairSubmit();
+        fetchContractDetails();
     });
     </script>
 </body>

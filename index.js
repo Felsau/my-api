@@ -226,6 +226,48 @@ app.get('/api/tenant/dashboard', requireLogin, (req, res) => {
         });
 });
 
+// =================================================================
+// --- API: Get Tenant's Contract/Lease Details ---
+// =================================================================
+app.get('/api/contract-details', requireLogin, (req, res) => {
+    // ตรวจสอบว่าเป็นผู้เช่า (tenant) หรือไม่
+    if (req.session.user.role !== 'tenant') {
+        return res.status(403).json({ error: 'Forbidden' });
+    }
+
+    const tenantId = req.session.user.id;
+
+    // SQL query เพื่อดึงข้อมูลสัญญาเช่าที่เกี่ยวข้องกับผู้เช่าคนปัจจุบัน
+    // โดย JOIN ตาราง users, leases, และ rooms เข้าด้วยกัน
+    const sql = `
+        SELECT
+            u.name AS tenant_name,
+            r.room_number,
+            r.rent AS rent_rate,
+            l.start_date,
+            l.end_date,
+            l.contract_file AS contract_url
+        FROM leases l
+        JOIN users u ON l.tenant_id = u.id
+        JOIN rooms r ON l.room_id = r.id
+        WHERE l.tenant_id = ? AND l.status = 'active'
+    `;
+
+    // สั่งให้ฐานข้อมูลทำงาน
+    db.get(sql, [tenantId], (err, row) => {
+        if (err) {
+            console.error('Database error fetching contract details:', err.message);
+            return res.status(500).json({ error: 'เกิดข้อผิดพลาดในการดึงข้อมูลสัญญา' });
+        }
+        if (!row) {
+            return res.status(404).json({ error: 'ไม่พบข้อมูลสัญญาเช่า' });
+        }
+        
+        // ส่งข้อมูลที่ได้กลับไปเป็น JSON
+        res.json(row);
+    });
+});
+
 app.get('/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) {
