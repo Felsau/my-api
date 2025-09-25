@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,37 +6,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;700&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
-        :root {
-            --primary-color: #552f87;
-            --primary-hover: #44266a;
-            --sidebar-bg: #1f2937;
-            --sidebar-text: #d1d5db;
-            --sidebar-text-hover: #ffffff;
-            --sidebar-active-bg: #374151;
-            --main-bg: #f3f4f6;
-            --card-bg: #ffffff;
-            --text-dark: #111827;
-            --text-light: #6b7280;
-            --border-color: #e5e7eb;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --danger-color: #ef4444;
-            --success-color: #22c55e;
-            --rent-due-color: #ef4444;
-            --maintenance-color: #3b82f6;
-            --info-color: #f59e0b;
-        }
-
+        :root { --primary-color: #552f87; --primary-hover: #44266a; --sidebar-bg: #1f2937; --sidebar-text: #d1d5db; --sidebar-text-hover: #ffffff; --sidebar-active-bg: #374151; --main-bg: #f3f4f6; --card-bg: #ffffff; --text-dark: #111827; --text-light: #6b7280; --border-color: #e5e7eb; --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); --danger-color: #ef4444; --success-color: #22c55e; --rent-due-color: #ef4444; --maintenance-color: #3b82f6; --info-color: #f59e0b; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Kanit', sans-serif; background-color: var(--main-bg); color: var(--text-dark); line-height: 1.6; }
-
         .dashboard-layout { display: flex; min-height: 100vh; }
         .sidebar { width: 260px; background-color: var(--sidebar-bg); color: var(--sidebar-text); display: flex; flex-direction: column; transition: width 0.3s ease; }
         .sidebar-header { padding: 1.5rem; border-bottom: 1px solid #374151; }
-        .logo { font-size: 1.8rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.75rem; text-decoration: none;}
+        .logo { font-size: 1.8rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
         .sidebar-menu { list-style: none; flex-grow: 1; margin-top: 1rem; }
         .sidebar-menu a { position: relative; display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; color: var(--sidebar-text); text-decoration: none; transition: background-color 0.2s, color 0.2s; border-left: 3px solid transparent; }
         .sidebar-menu a:hover { background-color: var(--sidebar-active-bg); color: var(--sidebar-text-hover); }
@@ -47,26 +25,20 @@
         .sidebar-footer { padding: 1.5rem; border-top: 1px solid #374151; }
         .logout-button { display: flex; align-items: center; gap: 1rem; text-decoration: none; color: var(--sidebar-text); transition: color 0.2s; }
         .notification-badge { position: absolute; top: 10px; left: 45px; background-color: var(--danger-color); color: white; font-size: 0.7rem; font-weight: bold; width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid var(--sidebar-bg); }
-
         .main-content { flex-grow: 1; padding: 2rem; overflow-y: auto; }
         .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
         .main-header h1 { font-size: 2.2rem; }
         .user-info { font-weight: 500; }
-        
         .content-panel { display: none; animation: fadeIn 0.5s ease-in-out; }
         .content-panel.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
         .overview-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
         .card, .panel-card { background-color: var(--card-bg); padding: 1.5rem; border-radius: 12px; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
-        
         .card-header { display: flex; align-items: flex-start; gap: 1rem; }
         .card-icon { background-color: var(--primary-color); color: #fff; width: 50px; height: 50px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; flex-shrink: 0; }
-        .card-content h3 { font-size: 1rem; color: var(--text-light); font-weight: 500; margin: 0 0 0.25rem 0;}
+        .card-content h3 { font-size: 1rem; color: var(--text-light); font-weight: 500; margin: 0 0 0.25rem 0; }
         .card-content p { font-size: 1.8rem; font-weight: 700; margin: 0; }
-        
         .panel-card h2, .panel-card h3 { font-size: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
-        
         .reminders-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
         .reminders-list li { display: flex; align-items: center; gap: 1rem; padding: 1rem; background-color: #f9fafb; border-radius: 8px; border-left: 4px solid; }
         .reminders-list .rent-due { border-color: var(--rent-due-color); }
@@ -77,38 +49,31 @@
         .reminders-list .maintenance i { color: var(--maintenance-color); }
         .reminders-list .info i { color: var(--info-color); }
         .reminders-list .description { color: var(--text-light); }
-
         .payment-breakdown { list-style: none; padding: 0; margin: 1.5rem 0; }
         .payment-breakdown li { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); }
         .payment-breakdown li:last-child { border-bottom: none; }
         .payment-breakdown .item-desc { color: var(--text-light); }
         .payment-breakdown .item-price { font-weight: 500; }
-
         .payment-total { font-size: 1.4rem; font-weight: 700; display: flex; justify-content: space-between; margin-top: 1rem; }
-        
         .qr-code-container { text-align: center; margin: 2rem 0; border-top: 1px solid var(--border-color); padding-top: 2rem; }
         .qr-code-container p { margin-bottom: 1rem; font-weight: 500; }
         .qr-code-img { width: 200px; height: 200px; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; background: #fff; }
         .qr-code-container .total-amount { font-size: 1.5rem; font-weight: 700; margin-top: 1rem; }
-        
         .bank-details { margin-top: 2rem; background-color: #f9fafb; padding: 1.5rem; border-radius: 8px; }
         .bank-details-table { width: 100%; border-collapse: collapse; }
         .bank-details-table td { padding: 0.6rem 0; }
-        .bank-details-table td:first-child { font-weight: 500; color: var(--text-light); width: 120px;}
-
-        /* --- Slip Upload Form Styles --- */
+        .bank-details-table td:first-child { font-weight: 500; color: var(--text-light); width: 120px; }
         #slip-upload-section { margin-top: 2.5rem; border-top: 2px solid var(--border-color); padding-top: 2rem; }
         .form-group { margin-bottom: 1.5rem; }
         .form-group label { display: block; font-weight: 500; margin-bottom: 0.5rem; }
-        .form-group input[type="file"], .form-group input[type="text"], .form-group input[type="date"], .form-group textarea { display: block; width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: #f9fafb; font-family: 'Kanit', sans-serif;}
-        .submit-btn { background-color: var(--primary-color); color: #fff; padding: 0.8rem 1.5rem; border: none; border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: background-color 0.2s; }
+        .form-group input[type="file"], .form-group input[type="text"], .form-group input[type="date"], .form-group textarea { display: block; width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: #f9fafb; font-family: 'Kanit', sans-serif; }
+        .submit-btn { background-color: var(--primary-color); color: #fff; padding: 0.8rem 1.5rem; border: none; border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: background-color 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
         .submit-btn:hover { background-color: var(--primary-hover); }
         .submit-btn:disabled { background-color: var(--text-light); cursor: not-allowed; }
         #upload-status { margin-top: 1rem; font-weight: 500; padding: 0.8rem; border-radius: 8px; display: none; }
         #upload-status.success { background-color: #d1fae5; color: #065f46; display: block; }
         #upload-status.error { background-color: #fee2e2; color: #991b1b; display: block; }
         .error-message { text-align: center; padding: 2rem; background-color: #fee2e2; color: #991b1b; border-radius: 8px; font-weight: 500; }
-
         .panel-card h3 { font-size: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
         .repair-list { display: flex; flex-direction: column; gap: 1rem; }
         .repair-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: #fff; }
@@ -117,8 +82,6 @@
         .repair-status { padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500; color: #fff; white-space: nowrap; }
         .status-completed { background-color: var(--success-color); }
         .status-in-progress { background-color: var(--info-color); }
-
-        /* ========== New Repair Form Styles ========== */
         .repair-form { display: flex; flex-direction: column; }
         .form-group { margin-bottom: 1.5rem; display: flex; flex-direction: column; }
         .form-group label { margin-bottom: 0.5rem; font-weight: 600; color: #333; }
@@ -129,10 +92,8 @@
         .status-pending { background-color: #ff5656; }
         .status-in-progress { background-color: #f39c12; }
         .status-completed { background-color: #27ae60; }
-
-        /* === Contract Panel Styles === */
-        .contract-card { background-color: #ffffff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);}
-        .contract-header h2 { margin-top: 0; margin-bottom: 24px; font-size: 1.2rem; color: #333; display: flex; align-items: center;}
+        .contract-card { background-color: #ffffff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
+        .contract-header h2 { margin-top: 0; margin-bottom: 24px; font-size: 1.2rem; color: #333; display: flex; align-items: center; }
         .contract-header h2 i { margin-right: 10px; color: #555; }
         .contract-info-wrapper { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 20px; padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid #e0e0e0; }
         .contract-info-item { display: flex; flex-direction: column; }
@@ -146,58 +107,22 @@
         .rules-list li { display: flex; align-items: center; gap: 1rem; padding: 0.8rem 0; border-bottom: 1px solid var(--border-color); font-size: 1rem; }
         .rules-list li:last-child { border-bottom: none; }
         .rules-list i { font-size: 1.2rem; color: var(--primary-color); width: 25px; text-align: center; }
-
-        /* === Contact Panel Styles === */
-        .contact-channels {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-        .channel-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1.25rem;
-            background-color: #f9fafb;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
-        .channel-item i {
-            font-size: 1.4rem;
-            color: var(--text-light);
-            width: 30px;
-            text-align: center;
-        }
-        .channel-item span {
-            font-weight: 500;
-            color: var(--text-dark);
-            font-size: 1rem;
-        }
-
-        /* === Move Out Panel Styles (NEW) === */
-        #moveout-panel .form-group label {
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--text-dark);
-        }
-        #moveout-panel .form-group input::placeholder,
-        #moveout-panel .form-group textarea::placeholder {
-            color: #9ca3af;
-        }
-        #moveout-panel p {
-            margin-bottom: 1.5rem;
-            color: var(--text-light);
-        }
-        #moveout-panel .submit-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+        .contact-channels { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+        .channel-item { display: flex; align-items: center; gap: 1rem; padding: 1.25rem; background-color: #f9fafb; border-radius: 8px; border: 1px solid var(--border-color); }
+        .channel-item i { font-size: 1.4rem; color: var(--text-light); width: 30px; text-align: center; }
+        .channel-item span { font-weight: 500; color: var(--text-dark); font-size: 1rem; }
+        #moveout-panel .form-group label { font-size: 1rem; font-weight: 500; color: var(--text-dark); }
+        #moveout-panel .form-group input::placeholder, #moveout-panel .form-group textarea::placeholder { color: #9ca3af; }
+        #moveout-panel p { margin-bottom: 1.5rem; color: var(--text-light); }
+        #moveout-panel .submit-btn { display: inline-flex; align-items: center; gap: 0.5rem; }
+        .profile-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        @media (min-width: 768px) { .profile-grid { grid-template-columns: 1fr 1fr; } }
+        .info-group label { display: block; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-light); }
+        .info-group .value-display { width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: #f0f2f5; color: var(--text-dark); font-size: 1rem; }
+        .profile-actions { text-align: right; margin-top: 2rem; }
     </style>
 </head>
-<body>
-
+<>
     <div class="dashboard-layout">
         <aside class="sidebar">
             <div class="sidebar-header">
@@ -274,11 +199,10 @@
                     </ul>
                 </div>
             </section>
-            
+
             <section id="payments-panel" class="content-panel">
                 <div class="panel-card">
                     <h2><i class="fa-solid fa-receipt"></i> ชำระเงินรอบปัจจุบัน</h2>
-                    
                     <ul class="payment-breakdown">
                         <li>
                             <span class="item-desc">ค่าเช่าห้อง</span>
@@ -380,7 +304,7 @@
                     <div class="repair-list"></div>
                 </div>
             </section>
-            
+
             <section id="contract-panel" class="content-panel">
                 <div class="panel-card contract-card">
                     <div class="contract-header">
@@ -416,7 +340,7 @@
                     </div>
                 </div>
             </section>
-            
+
             <section id="rules-panel" class="content-panel">
                 <div class="panel-card">
                     <h2><i class="fa-solid fa-scroll"></i> กฎระเบียบและข้อบังคับของหอพัก</h2>
@@ -456,7 +380,7 @@
                     </div>
 
                     <h2 style="margin-top: 2.5rem; border-top: 1px solid var(--border-color); padding-top: 2rem;"><i class="fa-solid fa-paper-plane"></i> ส่งข้อความด่วน</h2>
-                    
+
                     <form id="quick-message-form">
                         <div class="form-group">
                             <textarea id="quick-message-text" name="message" rows="6" placeholder="พิมพ์ข้อความด่วนของคุณที่นี่... ระบบจะส่งข้อความไปยังเจ้าของบ้าน"></textarea>
@@ -466,7 +390,7 @@
                     <div id="form-feedback" style="margin-top: 1rem; font-weight: bold;"></div>
                 </div>
             </section>
-            
+
             <section id="moveout-panel" class="content-panel">
                 <div class="panel-card">
                     <h2><i class="fa-solid fa-person-walking-arrow-right"></i> แบบฟอร์มแจ้งย้ายออก</h2>
@@ -492,29 +416,62 @@
                 </div>
             </section>
 
+            <section id="profile-panel" class="content-panel">
+                <div class="panel-card">
+                    <h2><i class="fa-solid fa-address-card"></i> ข้อมูลส่วนตัว</h2>
+                    <div class="profile-grid" style="margin-top: 1.5rem;">
+                        <div class="info-group">
+                            <label>ชื่อ-สกุล</label>
+                            <div id="profile-name" class="value-display">กำลังโหลด...</div>
+                        </div>
+                        <div class="info-group">
+                            <label>เลขห้อง/บ้านเลขที่</label>
+                            <div id="profile-room" class="value-display">กำลังโหลด...</div>
+                        </div>
+                        <div class="info-group">
+                            <label>เบอร์โทรศัพท์</label>
+                            <div id="profile-phone" class="value-display">กำลังโหลด...</div>
+                        </div>
+                        <div class="info-group">
+                            <label>อีเมล</label>
+                            <div id="profile-email" class="value-display">กำลังโหลด...</div>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                        <i class="fa-solid fa-user-shield"></i> ข้อมูลผู้ติดต่อฉุกเฉิน
+                    </h3>
+                    <div class="profile-grid" style="margin-top: 1.5rem;">
+                        <div class="info-group">
+                            <label>ชื่อ-สกุล ผู้ติดต่อฉุกเฉิน</label>
+                            <div id="emergency-name" class="value-display">กำลังโหลด...</div>
+                        </div>
+                        <div class="info-group">
+                            <label>เบอร์โทรศัพท์ติดต่อฉุกเฉิน</label>
+                            <div id="emergency-phone" class="value-display">กำลังโหลด...</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
+
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         let currentPaymentId = null;
 
-        // --- Data Fetching Functions ---
-
         function fetchDashboardData() {
             fetch('/api/tenant/dashboard')
                 .then(response => {
                     if (!response.ok) {
-                        // In a real app, you might redirect to login
-                        // For this demo, we'll just show an error.
-                        // window.location.href = '/login.html'; 
                         throw new Error('Not authenticated');
                     }
                     return response.json();
                 })
                 .then(data => {
                     document.getElementById('welcome-message').textContent = data.userInfo?.name ? `สวัสดี, ${data.userInfo.name}` : 'ยินดีต้อนรับ';
-                    
+
                     if (data.payment) {
                         currentPaymentId = data.payment.id;
                         document.getElementById('paymentId').value = currentPaymentId;
@@ -529,7 +486,7 @@
                     }
 
                     document.getElementById('overview-maintenance-count').textContent = data.maintenance?.count > 0 ? `${data.maintenance.count} รายการ` : '0 รายการ';
-                    
+
                     const remindersList = document.getElementById('reminders-list');
                     remindersList.innerHTML = '';
                     if (data.payment && data.payment.status !== 'paid') {
@@ -547,13 +504,19 @@
                 })
                 .catch(error => {
                     console.error('Error fetching dashboard data:', error);
-                    // Mock data for demonstration if API fails
                     document.getElementById('welcome-message').textContent = 'สวัสดี, สมศรี ใจดี';
                     document.getElementById('overview-amount').textContent = '5,500 บาท';
                     document.getElementById('overview-due-date').textContent = '5 ต.ค. 2568';
                     document.getElementById('overview-maintenance-count').textContent = '1 รายการ';
                     document.getElementById('reminders-list').innerHTML = `<li class="rent-due"><i class="fa-solid fa-file-invoice-dollar"></i><div><span class="description">กำหนดชำระค่าเช่าวันที่ 5 ต.ค. 2568</span></div></li><li class="maintenance"><i class="fa-solid fa-screwdriver-wrench"></i><div><span class="description">รายการแจ้งซ่อม "แอร์ไม่เย็น" กำลังดำเนินการ</span></div></li>`;
                 });
+        }
+
+        function updateContent(elementId, value) {
+            const element = document.querySelector(`#${elementId}`);
+            if (element) {
+                element.textContent = value || 'ไม่มีข้อมูล';
+            }
         }
 
         function fetchAnnouncements() {
@@ -582,7 +545,7 @@
                 .catch(err => {
                     console.error('Error fetching announcements:', err);
                     const list = document.getElementById('announcements-list');
-                     list.innerHTML = `<li class="info"><i class="fa-solid fa-bullhorn"></i><div><strong>แจ้งตัดไฟวันที่ 10 ต.ค.</strong><br><span class="description">เนื่องจากมีการบำรุงรักษาระบบไฟฟ้า จะมีการตัดไฟในวันที่ 10 ต.ค. เวลา 9:00 - 12:00 น.</span><br><small>${new Date().toLocaleDateString('th-TH')}</small></div></li>`;
+                    list.innerHTML = `<li class="info"><i class="fa-solid fa-bullhorn"></i><div><strong>แจ้งตัดไฟวันที่ 10 ต.ค.</strong><br><span class="description">เนื่องจากมีการบำรุงรักษาระบบไฟฟ้า จะมีการตัดไฟในวันที่ 10 ต.ค. เวลา 9:00 - 12:00 น.</span><br><small>${new Date().toLocaleDateString('th-TH')}</small></div></li>`;
                 });
         }
 
@@ -593,7 +556,7 @@
             fetch('/api/maintenance-requests')
                 .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
                 .then(repairs => {
-                    repairListContainer.innerHTML = ''; 
+                    repairListContainer.innerHTML = '';
 
                     if (repairs.length === 0) {
                         repairListContainer.innerHTML = '<p>ยังไม่มีรายการแจ้งซ่อม</p>';
@@ -602,10 +565,14 @@
 
                     const formatStatus = (status) => {
                         switch (status) {
-                            case 'pending': return { text: 'รอดำเนินการ', class: 'status-pending' };
-                            case 'in_progress': return { text: 'กำลังดำเนินการ', class: 'status-in-progress' };
-                            case 'completed': return { text: 'เสร็จสิ้น', class: 'status-completed' };
-                            default: return { text: status, class: '' };
+                            case 'pending':
+                                return { text: 'รอดำเนินการ', class: 'status-pending' };
+                            case 'in_progress':
+                                return { text: 'กำลังดำเนินการ', class: 'status-in-progress' };
+                            case 'completed':
+                                return { text: 'เสร็จสิ้น', class: 'status-completed' };
+                            default:
+                                return { text: status, class: '' };
                         }
                     };
 
@@ -625,12 +592,17 @@
                 .catch(error => {
                     console.error('Error fetching repair data:', error);
                     repairListContainer.innerHTML = '';
-                    const mockRepairs = [
-                        { issue_type: "แอร์ไม่เย็น", details: "เปิดแล้วมีแต่ลมออกมา", status: "in_progress" },
-                        { issue_type: "น้ำรั่ว", details: "น้ำรั่วซึมจากก๊อกในห้องน้ำ", status: "completed" }
-                    ];
+                    const mockRepairs = [{
+                        issue_type: "แอร์ไม่เย็น",
+                        details: "เปิดแล้วมีแต่ลมออกมา",
+                        status: "in_progress"
+                    }, {
+                        issue_type: "น้ำรั่ว",
+                        details: "น้ำรั่วซึมจากก๊อกในห้องน้ำ",
+                        status: "completed"
+                    }];
                     mockRepairs.forEach(repair => {
-                         const statusInfo = {
+                        const statusInfo = {
                             'in_progress': { text: 'กำลังดำเนินการ', class: 'status-in-progress' },
                             'completed': { text: 'เสร็จสิ้น', class: 'status-completed' }
                         }[repair.status];
@@ -644,7 +616,9 @@
                 .then(response => response.ok ? response.json() : Promise.reject('ไม่สามารถโหลดข้อมูลสัญญาได้'))
                 .then(data => {
                     const formatDate = (dateString) => new Date(dateString).toLocaleDateString('th-TH', {
-                        year: 'numeric', month: 'long', day: 'numeric'
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
                     });
 
                     document.getElementById('contract-tenant-name').textContent = data.tenant_name || 'N/A';
@@ -661,23 +635,30 @@
                 })
                 .catch(error => {
                     console.error('Error fetching contract details:', error);
-                    const formatDate = (dateString) => new Date(dateString).toLocaleDateString('th-TH', {year: 'numeric', month: 'long', day: 'numeric'});
+                    const formatDate = (dateString) => new Date(dateString).toLocaleDateString('th-TH', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
                     document.getElementById('contract-tenant-name').textContent = 'สมศรี ใจดี';
                     document.getElementById('contract-room-number').textContent = 'A201';
                     document.getElementById('contract-start-date').textContent = formatDate('2025-01-01');
                     document.getElementById('contract-end-date').textContent = formatDate('2025-12-31');
                     document.getElementById('contract-rent-rate').textContent = '5,000 บาท/เดือน';
                     const downloadLink = document.getElementById('download-contract-link');
-                    downloadLink.href = "#"; 
+                    downloadLink.href = "#";
                     downloadLink.style.display = 'inline-flex';
                 });
         }
-        
+
         function fetchBillingDetails() {
             fetch('/api/billing-details')
                 .then(response => response.ok ? response.json() : Promise.reject('Could not fetch billing details'))
                 .then(data => {
-                    const formatNumber = (num) => num.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    const formatNumber = (num) => num.toLocaleString('th-TH', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
                     const formatInteger = (num) => num.toLocaleString('th-TH');
 
                     document.getElementById('rent-amount').textContent = `${formatInteger(data.room_rent)} บาท`;
@@ -688,14 +669,17 @@
                     const totalAmountForQR = data.total_amount.toFixed(2);
                     const promptPayId = '0999999999';
                     const qrImg = document.getElementById('qr-code-img');
-                    
+
                     qrImg.src = `https://promptpay.io/${promptPayId}/${totalAmountForQR}.png`;
                     qrImg.style.visibility = 'visible';
                     document.getElementById('qr-total-amount').textContent = `ยอดรวม: ${formatNumber(data.total_amount)} บาท`;
                 })
                 .catch(error => {
                     console.error('Error fetching billing details:', error);
-                     const formatNumber = (num) => num.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    const formatNumber = (num) => num.toLocaleString('th-TH', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
                     const formatInteger = (num) => num.toLocaleString('th-TH');
                     document.getElementById('rent-amount').textContent = `${formatInteger(5000)} บาท`;
                     document.getElementById('water-amount').textContent = `${formatInteger(150)} บาท`;
@@ -707,8 +691,6 @@
                     document.getElementById('qr-total-amount').textContent = `ยอดรวม: ${formatNumber(5500.75)} บาท`;
                 });
         }
-
-        // --- Event Handlers ---
 
         function handleNewRepairSubmit() {
             const form = document.getElementById('new-repair-form');
@@ -734,57 +716,94 @@
             });
         }
 
-        function handleMoveOutSubmit() {
-    const form = document.getElementById('moveout-form');
-    if (!form) return;
-    
-    form.addEventListener('submit', function(event) {
-        event.preventDefault(); // หยุดการทำงานปกติของฟอร์ม
-
-        // ดึงข้อมูลจาก Input Fields
-        const moveoutDate = document.getElementById('moveout-date').value;
-        const moveoutReason = document.getElementById('moveout-reason').value;
-        const forwardingAddress = document.getElementById('forwarding-address').value;
-
-        // ตรวจสอบข้อมูลเบื้องต้น (เผื่อ required ไม่ทำงาน)
-        if (!moveoutDate) {
-            alert('กรุณาเลือกวันที่คาดว่าจะย้ายออก');
-            return;
+        function updateContent(elementId, value, isHtml = false) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.classList.remove('loading');
+                if (isHtml) {
+                    element.innerHTML = value || '<span style="color: #999;">ไม่มีข้อมูล</span>';
+                } else {
+                    element.textContent = value || 'ไม่มีข้อมูล';
+                }
+            }
         }
 
-        // เตรียมข้อมูลที่จะส่งไป Backend
-        const formData = {
-            'moveout-date': moveoutDate,
-            'moveout-reason': moveoutReason,
-            'forwarding-address': forwardingAddress
-        };
+        function fetchProfileData() {
+            fetch('/api/tenant/profile')
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        const user = data.data;
+                        updateContent('profile-name', user.name);
+                        updateContent('profile-room', user.room_number);
+                        updateContent('profile-phone', user.phone);
+                        updateContent('profile-email', user.email);
 
-        // ส่งข้อมูลไปที่ API ที่เราสร้างไว้ ด้วย fetch()
-        fetch('/api/moveout-request', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData) // แปลง Object เป็น JSON String
-        })
-        .then(response => response.json()) // รับค่าที่ตอบกลับมา
-        .then(data => {
-            if (data.success) {
-                // ถ้าสำเร็จ
-                alert('ยืนยันการแจ้งย้ายออกสำเร็จ! เจ้าหน้าที่จะติดต่อกลับเพื่อยืนยันอีกครั้ง');
-                form.reset(); // ล้างค่าในฟอร์ม
-            } else {
-                // ถ้าไม่สำเร็จ (เช่น กรอกข้อมูลไม่ครบ)
-                alert('เกิดข้อผิดพลาด: ' + data.error);
-            }
-        })
-        .catch(error => {
-            // กรณี Network Error
-            console.error('Error submitting move-out form:', error);
-            alert('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้');
-        });
-    });
-}
+                        const emergencyContact = user.emergency_contact_name ?
+                            `${user.emergency_contact_name}` :
+                            null;
+                        updateContent('emergency-name', emergencyContact);
+                        updateContent('emergency-phone', user.emergency_contact_phone);
+                    } else {
+                        throw new Error(data.error || 'Failed to load profile data');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching profile data:', error);
+                    document.querySelectorAll('#profile-panel .value-display').forEach(el => {
+                        el.textContent = 'โหลดข้อมูลล้มเหลว';
+                        el.style.color = 'red';
+                    });
+                });
+        }
+
+        function handleMoveOutSubmit() {
+            const form = document.getElementById('moveout-form');
+            if (!form) return;
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const moveoutDate = document.getElementById('moveout-date').value;
+                const moveoutReason = document.getElementById('moveout-reason').value;
+                const forwardingAddress = document.getElementById('forwarding-address').value;
+
+                if (!moveoutDate) {
+                    alert('กรุณาเลือกวันที่คาดว่าจะย้ายออก');
+                    return;
+                }
+
+                const formData = {
+                    'moveout-date': moveoutDate,
+                    'moveout-reason': moveoutReason,
+                    'forwarding-address': forwardingAddress
+                };
+
+                fetch('/api/moveout-request', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('ยืนยันการแจ้งย้ายออกสำเร็จ! เจ้าหน้าที่จะติดต่อกลับเพื่อยืนยันอีกครั้ง');
+                            form.reset();
+                        } else {
+                            alert('เกิดข้อผิดพลาด: ' + data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error submitting move-out form:', error);
+                        alert('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้');
+                    });
+            });
+        }
 
         function handleSlipUpload() {
             const form = document.getElementById('slip-upload-form');
@@ -812,36 +831,34 @@
                 link.addEventListener('click', (event) => {
                     event.preventDefault();
                     const targetId = link.getAttribute('data-target');
-                    
+
                     sidebarLinks.forEach(item => item.classList.remove('active'));
                     link.classList.add('active');
-                    
+
                     contentPanels.forEach(panel => panel.classList.remove('active'));
                     const targetPanel = document.getElementById(targetId);
                     if (targetPanel) {
                         targetPanel.classList.add('active');
                     }
-                    
+
                     mainTitle.textContent = link.querySelector('span').textContent;
                 });
             });
         }
 
-        // --- Initialisation ---
-        
         setupSidebarNavigation();
         handleNewRepairSubmit();
         handleSlipUpload();
         handleContactFormSubmit();
-        handleMoveOutSubmit(); // MAKE SURE THIS IS CALLED
+        handleMoveOutSubmit();
 
-        // Load data for the initial view
         fetchDashboardData();
         fetchBillingDetails();
         fetchAnnouncements();
         loadRepairs();
         fetchContractDetails();
+        fetchProfileData();
     });
-    </script>
+</script>
 </body>
 </html>
