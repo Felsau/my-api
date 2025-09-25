@@ -134,105 +134,22 @@
         .status-completed { background-color: #27ae60; }
 
         /* === Contract Panel Styles === */
-        .contract-card {
-            background-color: #ffffff;
-            padding: 24px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
+        .contract-card { background-color: #ffffff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);}
+        .contract-header h2 { margin-top: 0; margin-bottom: 24px; font-size: 1.2rem; color: #333; display: flex; align-items: center;}
 
-        .contract-header h2 {
-            margin-top: 0;
-            margin-bottom: 24px;
-            font-size: 1.2rem;
-            color: #333;
-            display: flex;
-            align-items: center;
-        }
-
-        .contract-header h2 i {
-            margin-right: 10px;
-            color: #555;
-        }
-
-        .contract-info-wrapper {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 20px;
-            padding-bottom: 24px;
-            margin-bottom: 24px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .contract-info-item {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .contract-info-item .label {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 4px;
-        }
-
-        .contract-info-item .value {
-            font-size: 1rem;
-            font-weight: 500;
-            color: #333;
-        }
-
-        .contract-actions {
-            text-align: left;
-        }
-
-        .download-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #6200ea; /* Purple color */
-            color: #ffffff;
-            padding: 12px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .download-button:hover {
-            background-color: #5100c6; /* Darker purple on hover */
-        }
-
-        .download-button i {
-            margin-right: 8px;
-        }
-
-        /* === Rules Panel Styles (เพิมใหม่) === */
-        .rules-list {
-            list-style: none;
-            padding: 0;
-            margin-top: 1.5rem;
-        }
-        .rules-list li {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.8rem 0;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 1rem;
-        }
-        .rules-list li:last-child {
-            border-bottom: none;
-        }
-        .rules-list i {
-            font-size: 1.2rem;
-            color: var(--primary-color);
-            width: 25px;
-            text-align: center;
-        }
+        .contract-header h2 i { margin-right: 10px; color: #555; }
+        .contract-info-wrapper { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 20px; padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid #e0e0e0; }
+        .contract-info-item { display: flex; flex-direction: column; }
+        .contract-info-item .label { font-size: 0.9rem; color: #666; margin-bottom: 4px; }
+        .contract-info-item .value { font-size: 1rem; font-weight: 500; color: #333; }
+        .contract-actions { text-align: left; }
+        .download-button { display: inline-flex; align-items: center; justify-content: center; background-color: #6200ea; color: #ffffff; padding: 12px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; border: none; cursor: pointer; transition: background-color 0.3s ease; }
+        .download-button:hover { background-color: #5100c6; }
+        .download-button i { margin-right: 8px; }
+        .rules-list { list-style: none; padding: 0; margin-top: 1.5rem; }
+        .rules-list li { display: flex; align-items: center; gap: 1rem; padding: 0.8rem 0; border-bottom: 1px solid var(--border-color); font-size: 1rem; }
+        .rules-list li:last-child { border-bottom: none; }
+        .rules-list i { font-size: 1.2rem; color: var(--primary-color); width: 25px; text-align: center; }
     </style>
 </head>
 <body>
