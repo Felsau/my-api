@@ -1,28 +1,1133 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <title>Owner Dashboard</title>
-    <style>body { font-family: sans-serif; padding: 20px; }</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard เจ้าของหอพัก</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  />
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap");
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: "Sarabun", sans-serif; background: #f4f6f9; color: #333; display: flex; }
+      .sidebar { width: 260px; background: #2c3e50; color: #ecf0f1; display: flex; flex-direction: column; height: 100vh; position: fixed; }
+      .sidebar-header { padding: 20px; font-size: 1.2em; font-weight: 700; border-bottom: 1px solid #34495e; display: flex; align-items: center; }
+      .sidebar-header i { margin-right: 15px; }
+      .sidebar-nav { flex-grow: 1; list-style: none; padding: 0; margin: 20px 0; }
+      .sidebar-nav li a { display: flex; align-items: center; padding: 15px 25px; color: #ecf0f1; text-decoration: none; transition: 0.3s; cursor: pointer; }
+      .sidebar-nav li a:hover { background: #34495e; }
+      .sidebar-nav li.active a { background: #46627f; border-left: 4px solid #3498db; padding-left: 21px; }
+      .sidebar-nav li a i { width: 25px; margin-right: 15px; text-align: center; }
+      .sidebar-footer { padding: 20px 25px; border-top: 1px solid #34495e; }
+      .sidebar-footer a { color: #ecf0f1; text-decoration: none; display: flex; align-items: center; }
+      .sidebar-footer a i { margin-right: 15px; }
+      .main-content { margin-left: 260px; flex-grow: 1; padding: 25px; }
+      .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+      .header h1 { margin: 0; font-size: 2em; }
+      .user-welcome { font-size: 1em; color: #555; }
+      .content-section.hidden, .modal-overlay.hidden { display: none; }
+      .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
+      .card { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; align-items: center; }
+      .card .icon { font-size: 2.5em; margin-right: 20px; padding: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; }
+      .card .icon.purple { color: #8e44ad; background: #e8dff5; }
+      .card .icon.orange { color: #f39c12; background: #fef5e7; }
+      .card .icon.blue { color: #3498db; background: #eaf2f8; }
+      .card .icon.green { color: #2ecc71; background: #eafaf1; }
+      .card .info h3 { margin: 0 0 5px; font-size: 0.9em; color: #777; font-weight: 500; }
+      .card .info p { margin: 0; font-size: 1.5em; font-weight: 700; }
+      .alerts { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+      .alerts-header { font-size: 1.2em; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; }
+      .alerts-header i { margin-right: 10px; color: #e74c3c; }
+      .alert-item { padding: 15px; border: 1px solid #ecf0f1; border-radius: 5px; margin-bottom: 10px; display: flex; align-items: center; }
+      .alert-item:last-child { margin-bottom: 0; }
+      .alert-item i { margin-right: 15px; color: #7f8c8d; }
+      .alert-item .fa-triangle-exclamation { color: #f39c12; }
+      .tenant-section { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+      .tenant-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+      .tenant-header h2 { margin: 0; font-size: 1.3em; font-weight: 700; display: flex; align-items: center; }
+      .tenant-header h2 i { margin-right: 10px; color: #2c3e50; }
+      .tenant-actions, .filter-actions { display: flex; gap: 15px; }
+      .filter-actions select { padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; font-family: 'Sarabun', sans-serif; background: #fff; cursor: pointer; }
+      .add-tenant-btn { background: #8e44ad; color: #fff; border: none; padding: 10px 18px; border-radius: 5px; font-size: 0.9em; cursor: pointer; transition: 0.3s; font-family: "Sarabun", sans-serif; display: flex; align-items: center; }
+      .add-tenant-btn i { margin-right: 8px; }
+      .add-tenant-btn:hover { background: #733191; }
+      .search-tenant input { padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.9em; font-family: "Sarabun", sans-serif; min-width: 250px; }
+      .tenant-table { width: 100%; border-collapse: collapse; }
+      .tenant-table th, .tenant-table td { text-align: left; padding: 15px 12px; border-bottom: 1px solid #ecf0f1; }
+      .tenant-table th { font-weight: 700; font-size: 0.9em; color: #555; text-transform: uppercase; white-space: nowrap; }
+      .tenant-table tbody tr:hover { background: #f9f9f9; }
+      .status-badge { padding: 5px 12px; border-radius: 15px; font-size: 0.85em; color: #fff; font-weight: 500; white-space: nowrap; }
+      .status-paid, .status-badge.repair-done { background: #2ecc71; }
+      .status-overdue, .status-badge.repair-pending { background: #e74c3c; }
+      .status-pending, .status-badge.repair-in-progress { background: #f39c12; }
+      .status-default { background: #8e44ad; }
+      .action-icons a { color: #7f8c8d; margin: 0 8px; font-size: 1.1em; transition: 0.3s; }
+      .action-icons a:hover { color: #34495e; }
+      .financial-action-btn { background: none; border: none; color: #7f8c8d; cursor: pointer; font-size: 1.2em; transition: 0.3s; padding: 0; margin: 0 5px; }
+      .financial-action-btn.green { color: #2ecc71; }
+      .financial-action-btn.red { color: #e74c3c; }
+      .export-btn { background: #8e44ad; color: #fff; border: none; padding: 10px 18px; border-radius: 5px; font-size: 0.9em; cursor: pointer; transition: 0.3s; font-family: "Sarabun", sans-serif; display: flex; align-items: center; margin-bottom: 25px; width: max-content; }
+      .export-btn i { margin-right: 8px; }
+      .export-btn:hover { background: #733191; }
+      .repair-list { display: flex; flex-direction: column; gap: 15px; }
+      .repair-card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); border: 1px solid #e9ecef; padding: 20px; display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+      .repair-card-info { flex-grow: 1; }
+      .repair-card-info h3 { margin: 0 0 8px 0; font-size: 1.1em; font-weight: 700; }
+      .repair-card-info h3 .room-number { color: #8e44ad; }
+      .repair-card-info p { margin: 0 0 12px 0; color: #555; }
+      .repair-card-info .meta-info { font-size: 0.85em; color: #777; display: flex; align-items: center; gap: 20px; }
+      .meta-info .status-badge { margin-right: 10px; }
+      .repair-actions select { padding: 8px 12px; border: 1px solid #ccc; border-radius: 5px; font-family: 'Sarabun', sans-serif; font-size: 0.9em; cursor: pointer; background-color: #f8f9fa; min-width: 150px; }
+      .repair-actions select:hover { border-color: #999; }
+      .repair-actions select:focus { outline: 2px solid #8e44ad60; border-color: #8e44ad; }
+      .repair-card.updating { opacity: 0.5; pointer-events: none; }
+      .announcement-form { margin-top: 20px; }
+      .form-group { margin-bottom: 20px; }
+      .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #555; }
+      .form-group input[type="text"], .form-group textarea, .form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 1em; font-family: "Sarabun", sans-serif; }
+      .form-group textarea { resize: vertical; }
+      .form-group button { border: none; font-size: 1em; }
+      .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); z-index: 1000; display: flex; justify-content: center; align-items: center; }
+      .modal-content { background: #fff; padding: 30px; border-radius: 8px; width: 90%; max-width: 700px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto; }
+      .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 20px; }
+      .modal-header h3 { margin: 0; font-size: 1.4em; }
+      .close-modal-btn { background: none; border: none; font-size: 2em; cursor: pointer; color: #888; }
+      .billing-form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
+      .modal-content hr { border: none; border-top: 1px solid #eee; margin: 25px 0; }
+      .modal-content h4 { font-size: 1.1em; margin-bottom: 15px; color: #333; }
+      .modal-summary { text-align: right; margin-top: 25px; font-size: 1.2em; font-weight: bold; }
+      .modal-summary span { color: #8e44ad; }
+      .modal-actions { margin-top: 25px; display: flex; justify-content: flex-end; gap: 15px; }
+      #billing-table .action-icons button { background: none; border: none; cursor: pointer; }
+  </style>
 </head>
 <body>
-    <h1 id="welcome-message">Welcome, Owner!</h1>
-    <div id="user-info"></div>
-    <a href="/logout">Logout</a>
+<nav class="sidebar">
+  <div class="sidebar-header">
+    <i class="fa-solid fa-house"></i>
+    <span>บ้านพักค้น (เจ้าของ)</span>
+  </div>
+  <ul class="sidebar-nav">
+    <li id="nav-overview" class="active"><a><i class="fa-solid fa-chart-pie"></i> ภาพรวม</a></li>
+    <li id="nav-tenants"><a><i class="fa-solid fa-users"></i> จัดการผู้เช่า</a></li>
+    <li id="nav-rooms"><a><i class="fa-solid fa-building"></i> จัดการห้องพัก</a></li>
+    <li id="nav-accounting"><a><i class="fa-solid fa-file-invoice-dollar"></i> บัญชีและการเงิน</a></li>
+    <li id="nav-repairs"><a><i class="fa-solid fa-screwdriver-wrench"></i> รายการแจ้งซ่อม</a></li>
+    <li id="nav-contracts"><a><i class="fa-solid fa-handshake"></i> จัดการสัญญาเช่า</a></li>
+    <li id="nav-announcements"><a><i class="fa-solid fa-bullhorn"></i> ประกาศ/ข่าวสาร</a></li>
+    <li id="nav-billing"><a><i class="fa-solid fa-bolt"></i> ค่าเช่า/ค่าน้ำ/ค่าไฟ</a></li>
+    <li id="nav-reports"><a><i class="fa-solid fa-chart-line"></i> รายงานและสถิติ</a></li>
+  </ul>
+  <div class="sidebar-footer">
+    <a href="/logout"><i class="fa-solid fa-right-from-bracket"></i><span>ออกจากระบบ</span></a>
+  </div>
+</nav>
 
-    <script>
-        // Script สำหรับดึงข้อมูล User มาแสดง
-        fetch('/api/userinfo')
-            .then(response => response.json())
-            .then(data => {
-                if (data.user) {
-                    document.getElementById('welcome-message').textContent = `Welcome, ${data.user.name}! (Owner)`;
-                    document.getElementById('user-info').innerHTML = `
-                        <p><strong>Email:</strong> ${data.user.email}</p>
-                        <p><strong>Phone:</strong> ${data.user.phone}</p>
-                    `;
+<main class="main-content">
+  <header class="header">
+    <h1 id="main-header">ภาพรวม</h1>
+    <div class="user-welcome" id="welcome-text">สวัสดี, เจ้าของหอพัก</div>
+  </header>
+
+  <div id="overview-section" class="content-section">
+    <section class="summary-cards">
+      <div class="card">
+        <div class="icon purple"><i class="fa-solid fa-door-open"></i></div>
+        <div class="info">
+          <h3>ห้องว่าง</h3>
+          <p>--</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon orange"><i class="fa-solid fa-user-clock"></i></div>
+        <div class="info">
+          <h3>ค้างชำระ</h3>
+          <p>--</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon blue"><i class="fa-solid fa-tools"></i></div>
+        <div class="info">
+          <h3>แจ้งซ่อมรอดำเนินการ</h3>
+          <p>--</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="icon green"><i class="fa-solid fa-baht-sign"></i></div>
+        <div class="info">
+          <h3>รายรับเดือนนี้</h3>
+          <p>--</p>
+        </div>
+      </div>
+    </section>
+    <section class="alerts">
+      <div class="alerts-header">
+        <i class="fa-solid fa-bell"></i><span>การแจ้งเตือนด่วน</span>
+      </div>
+      <div class="alert-list">
+        <div class="alert-item">กำลังโหลด...</div>
+      </div>
+    </section>
+  </div>
+
+  <div id="tenants-section" class="content-section hidden">
+    <section class="tenant-section">
+      <div class="tenant-header">
+        <h2><i class="fa-solid fa-users"></i> รายชื่อผู้เช่าทั้งหมด</h2>
+        <div class="tenant-actions">
+          <button class="add-tenant-btn"><i class="fa-solid fa-plus"></i> เพิ่มผู้เช่าใหม่</button>
+          <div class="search-tenant">
+            <input type="text" placeholder="ค้นหาผู้เช่า (ชื่อ, ห้อง)..." />
+          </div>
+        </div>
+      </div>
+      <table class="tenant-table">
+        <thead>
+          <tr>
+            <th>ห้อง</th>
+            <th>ชื่อ-สกุล</th>
+            <th>เบอร์โทร</th>
+            <th>สถานะ</th>
+            <th>จัดการ</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </div>
+
+  <div id="rooms-section" class="content-section hidden">
+    <section class="tenant-section">
+      <div class="tenant-header">
+        <h2><i class="fa-solid fa-building"></i> จัดการข้อมูลห้องพัก</h2>
+        <div class="tenant-actions">
+          <button class="add-tenant-btn" style="background-color: #5d6d7e;">
+            <i class="fa-solid fa-plus"></i> เพิ่มห้องใหม่
+          </button>
+        </div>
+      </div>
+      <table class="tenant-table">
+        <thead>
+          <tr>
+            <th>เลขที่ห้อง</th>
+            <th>ประเภท</th>
+            <th>ค่าเช่า</th>
+            <th>สถานะ</th>
+            <th>ผู้เข้าพัก</th>
+            <th>จัดการ</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </div>
+
+  <div id="accounting-section" class="content-section hidden">
+    <section class="tenant-section">
+      <div class="tenant-header" style="justify-content: flex-start;">
+        <h2><i class="fa-solid fa-file-invoice-dollar"></i> ภาพรวมการเงิน</h2>
+      </div>
+      <button class="export-btn"><i class="fa-solid fa-file-excel"></i> ดาวน์โหลดรายงาน Excel</button>
+      <table class="tenant-table financial-table">
+        <thead>
+          <tr>
+            <th>ห้อง</th>
+            <th>ผู้เช่า</th>
+            <th>ยอด</th>
+            <th>สถานะ</th>
+            <th>หลักฐาน</th>
+            <th>อนุมัติ</th>
+            <th>ปฏิเสธ</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </div>
+
+  <section id="repairs-section" class="content-section hidden">
+    <div class="tenant-section">
+      <div class="tenant-header">
+        <h2><i class="fa-solid fa-tools"></i> รายการแจ้งซ่อม</h2>
+        <div class="filter-actions">
+          <select id="repair-status-filter">
+            <option value="all">ทั้งหมด</option>
+            <option value="pending">รอดำเนินการ</option>
+            <option value="in-progress">กำลังดำเนินการ</option>
+            <option value="done">ซ่อมเสร็จแล้ว</option>
+          </select>
+        </div>
+      </div>
+      <div class="repair-list"></div>
+    </div>
+  </section>
+
+  <div id="contracts-section" class="content-section hidden">
+    <section class="tenant-section">
+      <div class="tenant-header">
+        <h2><i class="fa-solid fa-handshake"></i> สัญญาเช่าทั้งหมด</h2>
+        <div class="tenant-actions">
+          <button class="add-tenant-btn">
+            <i class="fa-solid fa-plus"></i> เพิ่มสัญญาเช่าใหม่
+          </button>
+        </div>
+      </div>
+      <table class="tenant-table">
+        <thead>
+          <tr>
+            <th>ห้อง</th>
+            <th>ผู้เช่า</th>
+            <th>วันที่เริ่มสัญญา</th>
+            <th>วันที่สิ้นสุดสัญญา</th>
+            <th>สถานะ</th>
+            <th>จัดการ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="6" style="text-align: center;">กำลังโหลดข้อมูล...</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <div id="announcements-section" class="content-section hidden">
+    <section class="tenant-section">
+      <div class="tenant-header">
+        <h2><i class="fa-solid fa-bullhorn"></i> สร้างประกาศใหม่</h2>
+      </div>
+      <form id="announcement-form" class="announcement-form">
+        <div class="form-group">
+          <label for="announcement-title">หัวข้อ</label>
+          <input type="text" id="announcement-title" name="title" required />
+        </div>
+        <div class="form-group">
+          <label for="announcement-content">เนื้อหา</label>
+          <textarea id="announcement-content" name="content" rows="8" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="announcement-recipient">ส่งถึง</label>
+          <select id="announcement-recipient" name="recipient">
+            <option value="all">ผู้เช่าทั้งหมด</option>
+            <option value="A101">ห้อง A101</option>
+            <option value="B205">ห้อง B205</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="add-tenant-btn">ส่งประกาศ</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <div id="billing-section" class="content-section hidden">
+    <section class="tenant-section">
+      <div class="tenant-header">
+        <h2><i class="fa-solid fa-file-invoice"></i> สร้างและจัดการบิล</h2>
+        <div class="filter-actions">
+          <select id="billing-month-filter"></select>
+          <select id="billing-year-filter"></select>
+          <button id="generate-bills-btn" class="add-tenant-btn" style="background-color: #27ae60;">
+            <i class="fa-solid fa-bolt"></i> สร้างบิลเดือนนี้
+          </button>
+        </div>
+      </div>
+      <table class="tenant-table" id="billing-table">
+        <thead>
+          <tr>
+            <th>ห้อง</th>
+            <th>ผู้เช่า</th>
+            <th>ค่าเช่า</th>
+            <th>ค่าน้ำ</th>
+            <th>ค่าไฟ</th>
+            <th>ยอดรวม</th>
+            <th>สถานะ</th>
+            <th>จัดการ</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </div>
+
+  <div id="billing-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title">จัดการบิลห้อง A101 - กันยายน 2568</h3>
+        <button class="close-modal-btn">&times;</button>
+      </div>
+      <form id="billing-details-form">
+        <input type="hidden" id="billing-id" name="billingId" />
+        <div class="billing-form-grid">
+          <div class="form-group">
+            <label>ค่าเช่า (บาท)</label>
+            <input type="number" id="bill-rent" name="rent" readonly />
+          </div>
+          <div class="form-group">
+            <label>ค่าใช้จ่ายอื่นๆ (บาท)</label>
+            <input type="number" id="bill-others" name="others" value="0" step="0.01" />
+          </div>
+        </div>
+        <hr />
+        <h4><i class="fa-solid fa-droplet"></i> ค่าน้ำ</h4>
+        <div class="billing-form-grid">
+          <div class="form-group">
+            <label>มิเตอร์ก่อนหน้า</label>
+            <input type="number" id="bill-water-prev" name="waterPrev" readonly />
+          </div>
+          <div class="form-group">
+            <label>มิเตอร์ปัจจุบัน</label>
+            <input type="number" id="bill-water-curr" name="waterCurr" required />
+          </div>
+          <div class="form-group">
+            <label>หน่วยที่ใช้</label>
+            <input type="text" id="bill-water-units" readonly />
+          </div>
+          <div class="form-group">
+            <label>รวมค่าน้ำ (บาท)</label>
+            <input type="text" id="bill-water-total" readonly />
+          </div>
+        </div>
+        <hr />
+        <h4><i class="fa-solid fa-lightbulb"></i> ค่าไฟ</h4>
+        <div class="billing-form-grid">
+          <div class="form-group">
+            <label>มิเตอร์ก่อนหน้า</label>
+            <input type="number" id="bill-elec-prev" name="elecPrev" readonly />
+          </div>
+          <div class="form-group">
+            <label>มิเตอร์ปัจจุบัน</label>
+            <input type="number" id="bill-elec-curr" name="elecCurr" required />
+          </div>
+          <div class="form-group">
+            <label>หน่วยที่ใช้</label>
+            <input type="text" id="bill-elec-units" readonly />
+          </div>
+          <div class="form-group">
+            <label>รวมค่าไฟ (บาท)</label>
+            <input type="text" id="bill-elec-total" readonly />
+          </div>
+        </div>
+        <hr />
+        <div class="modal-summary">
+          <h3>ยอดรวมที่ต้องชำระ: <span id="bill-grand-total">0.00</span> บาท</h3>
+        </div>
+        <div class="modal-actions">
+          <button type="submit" class="add-tenant-btn">
+            <i class="fa-solid fa-save"></i> บันทึกและแจ้งยอด
+          </button>
+          <button type="button" id="mark-as-paid-btn" class="add-tenant-btn" style="background-color: #2ecc71;">
+            <i class="fa-solid fa-check"></i> ชำระเงินแล้ว
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+ <script>
+    function safeText(str) {
+        const div = document.createElement("div");
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    function getStatusBadge(status) {
+        const st = (status || "").toLowerCase().trim();
+        if (st === "paid") {
+            return '<span class="status-badge status-paid">ชำระแล้ว</span>';
+        } else if (st === "overdue") {
+            return '<span class="status-badge status-overdue">ค้างชำระ</span>';
+        } else if (st === "pending") {
+            return '<span class="status-badge status-pending">รอตรวจสอบ</span>';
+        } else {
+            return `<span class="status-badge status-default">${safeText(status)}</span>`;
+        }
+    }
+
+    function getRoomStatusBadge(status) {
+        const st = (status || "").toLowerCase().trim();
+        if (st === "occupied") {
+            return '<span class="status-badge status-paid">มีผู้เช่า</span>';
+        } else if (st === "vacant") {
+            return '<span class="status-badge status-overdue">ว่าง</span>';
+        } else if (st === "pending") {
+            return '<span class="status-badge status-pending">จองไว้</span>';
+        } else {
+            return `<span class="status-badge status-default">${safeText(status)}</span>`;
+        }
+    }
+
+    function getRepairStatusBadge(status) {
+        const st = (status || "").toLowerCase().trim().replace("-", "");
+        if (st === "pending") {
+            return '<span class="status-badge repair-pending">รอดำเนินการ</span>';
+        } else if (st === "inprogress") {
+            return '<span class="status-badge repair-inprogress">กำลังดำเนินการ</span>';
+        } else if (st === "done") {
+            return '<span class="status-badge repair-done">ซ่อมเสร็จแล้ว</span>';
+        }
+        return `<span class="status-badge status-default">${safeText(status)}</span>`;
+    }
+
+    async function fetchUserInfo() {
+        try {
+            const res = await fetch("/api/userinfo");
+            const data = await res.json();
+            if (data.user && data.user.name) {
+                document.getElementById("welcome-text").textContent = `สวัสดี, ${data.user.name}`;
+            }
+        } catch (err) {
+            console.error("Error in fetchUserInfo:", err);
+        }
+    }
+
+    async function updateDashboard() {
+        try {
+            const res = await fetch("/api/owner/dashboard");
+            if (!res.ok) throw new Error("Network response not OK");
+            const data = await res.json();
+
+            const cardElems = document.querySelectorAll(".summary-cards .card .info p");
+            if (cardElems.length >= 4) {
+                cardElems[0].textContent = `${data.vacantRooms} ห้อง`;
+                cardElems[1].textContent = `${data.overduePayments} คน`;
+                cardElems[2].textContent = `${data.pendingMaintenance} รายการ`;
+                cardElems[3].textContent = `${(data.monthlyIncome || 0).toLocaleString("th-TH")} บาท`;
+            }
+
+            const alertList = document.querySelector(".alert-list");
+            alertList.innerHTML = "";
+            if (data.alerts && data.alerts.length > 0) {
+                data.alerts.forEach((alert) => {
+                    const html = `<div class="alert-item"><i class="fa-solid fa-triangle-exclamation"></i><span>${safeText(alert.message)}</span></div>`;
+                    alertList.insertAdjacentHTML("beforeend", html);
+                });
+            } else {
+                alertList.innerHTML = '<div class="alert-item">ไม่มีการแจ้งเตือนด่วน</div>';
+            }
+        } catch (err) {
+            console.error("Error fetching dashboard data:", err);
+            const alertList = document.querySelector(".alert-list");
+            alertList.innerHTML = '<div class="alert-item" style="color:red;">เกิดข้อผิดพลาดในการโหลดข้อมูลภาพรวม</div>';
+        }
+    }
+
+    async function fetchContractsFromAPI() {
+        const tbody = document.querySelector("#contracts-section .tenant-table tbody");
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">กำลังโหลดข้อมูล...</td></tr>';
+        try {
+            const res = await fetch("/api/owner/contracts");
+            if (!res.ok) throw new Error("Network response not OK");
+            const json = await res.json();
+            tbody.innerHTML = "";
+
+            const arr = json.contracts || [];
+            if (arr.length > 0) {
+                arr.forEach((contract) => {
+                    const tr = document.createElement("tr");
+                    const tdRoom = document.createElement("td");
+                    tdRoom.textContent = contract.roomNumber;
+                    const tdTenant = document.createElement("td");
+                    tdTenant.textContent = contract.tenantName;
+                    const tdStart = document.createElement("td");
+                    tdStart.textContent = new Date(contract.startDate).toLocaleDateString("th-TH");
+                    const tdEnd = document.createElement("td");
+                    tdEnd.textContent = new Date(contract.endDate).toLocaleDateString("th-TH");
+                    const tdStatus = document.createElement("td");
+                    if (contract.status === "expiring_soon") {
+                        tdStatus.innerHTML = '<span class="status-badge status-pending">ใกล้หมดอายุ</span>';
+                    } else if (contract.status === "active") {
+                        tdStatus.innerHTML = '<span class="status-badge status-paid">ปกติ</span>';
+                    } else {
+                        tdStatus.innerHTML = `<span class="status-badge status-default">${safeText(contract.status)}</span>`;
+                    }
+                    const tdAction = document.createElement("td");
+                    tdAction.classList.add("action-icons");
+                    tdAction.innerHTML = `<a href="#" title="แก้ไข"><i class="fa-solid fa-pencil"></i></a>`;
+                    tr.append(tdRoom, tdTenant, tdStart, tdEnd, tdStatus, tdAction);
+                    tbody.appendChild(tr);
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">ไม่พบข้อมูลสัญญาเช่า</td></tr>';
+            }
+        } catch (err) {
+            console.error("Error fetching contracts:", err);
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">ไม่สามารถโหลดข้อมูลสัญญาเช่าได้</td></tr>';
+        }
+    }
+
+    async function fetchTenantsFromAPI() {
+        const tbody = document.querySelector("#tenants-section .tenant-table tbody");
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">กำลังโหลดข้อมูล...</td></tr>';
+        try {
+            const res = await fetch("/api/owner/tenants");
+            if (!res.ok) throw new Error("Network response not OK");
+            const json = await res.json();
+            tbody.innerHTML = "";
+
+            const arr = json.tenants || [];
+            if (arr.length > 0) {
+                arr.forEach((tenant) => {
+                    const tr = document.createElement("tr");
+                    const tdRoom = document.createElement("td");
+                    tdRoom.textContent = tenant.roomNumber;
+                    const tdName = document.createElement("td");
+                    tdName.textContent = tenant.name;
+                    const tdPhone = document.createElement("td");
+                    tdPhone.textContent = tenant.phone;
+                    const tdStatus = document.createElement("td");
+                    tdStatus.innerHTML = getStatusBadge(tenant.paymentStatus);
+                    const tdActions = document.createElement("td");
+                    tdActions.classList.add("action-icons");
+                    tdActions.innerHTML = `<a href="#" title="แก้ไข"><i class="fa-solid fa-pencil"></i></a> <a href="#" title="ลบ"><i class="fa-solid fa-trash"></i></a>`;
+                    tr.append(tdRoom, tdName, tdPhone, tdStatus, tdActions);
+                    tbody.appendChild(tr);
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">ไม่พบข้อมูลผู้เช่า</td></tr>';
+            }
+        } catch (err) {
+            console.error("Error fetching tenants:", err);
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">ไม่สามารถโหลดข้อมูลผู้เช่าได้</td></tr>';
+        }
+    }
+
+    async function fetchRoomsFromAPI() {
+        const tbody = document.querySelector("#rooms-section .tenant-table tbody");
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">กำลังโหลดข้อมูล...</td></tr>';
+        try {
+            const res = await fetch("/api/owner/rooms");
+            if (!res.ok) throw new Error("Network response not OK");
+            const json = await res.json();
+            tbody.innerHTML = "";
+
+            const arr = json.rooms || [];
+            if (arr.length > 0) {
+                arr.forEach((room) => {
+                    const tr = document.createElement("tr");
+                    const tdRoom = document.createElement("td");
+                    tdRoom.textContent = room.roomNumber;
+                    const tdType = document.createElement("td");
+                    tdType.textContent = room.type;
+                    const tdRent = document.createElement("td");
+                    tdRent.textContent = (room.rent || 0).toLocaleString("th-TH");
+                    const tdStatus = document.createElement("td");
+                    tdStatus.innerHTML = getRoomStatusBadge(room.status);
+                    const tdTenant = document.createElement("td");
+                    tdTenant.textContent = room.tenant;
+                    const tdAction = document.createElement("td");
+                    tdAction.classList.add("action-icons");
+                    tdAction.innerHTML = `<a href="#" title="แก้ไข"><i class="fa-solid fa-pencil"></i></a>`;
+                    tr.append(tdRoom, tdType, tdRent, tdStatus, tdTenant, tdAction);
+                    tbody.appendChild(tr);
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">ไม่พบข้อมูลห้องพัก</td></tr>';
+            }
+        } catch (err) {
+            console.error("Error fetching rooms:", err);
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">ไม่สามารถโหลดข้อมูลห้องพักได้</td></tr>';
+        }
+    }
+
+    async function handleAnnouncementSubmit(event) {
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        console.log("Sending announcement:", data);
+        alert("ส่งประกาศแล้ว (ดูข้อมูลใน Console) \nหัวข้อ: " + data.title + "\nส่งถึง: " + data.recipient);
+        form.reset();
+    }
+
+    async function fetchAccountingData() {
+        const tbody = document.querySelector("#accounting-section .tenant-table tbody");
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">กำลังโหลดข้อมูล...</td></tr>';
+        try {
+            const res = await fetch("/api/owner/accounting");
+            if (!res.ok) throw new Error("Network response not OK");
+            const json = await res.json();
+            const arr = json.accountingData || [];
+            tbody.innerHTML = "";
+
+            if (arr.length > 0) {
+                arr.forEach((item) => {
+                    const tr = document.createElement("tr");
+                    const tdRoom = document.createElement("td");
+                    tdRoom.textContent = item.roomNumber;
+                    const tdTenant = document.createElement("td");
+                    tdTenant.textContent = item.tenantName;
+                    const tdAmount = document.createElement("td");
+                    tdAmount.textContent = (item.amount || 0).toLocaleString("th-TH");
+                    const tdStatus = document.createElement("td");
+                    tdStatus.innerHTML = getStatusBadge(item.status);
+                    const tdProof = document.createElement("td");
+                    const tdApprove = document.createElement("td");
+                    const tdReject = document.createElement("td");
+                    tdProof.innerHTML = "-";
+                    tdApprove.innerHTML = "-";
+                    tdReject.innerHTML = "-";
+
+                    if (item.status && item.status.toLowerCase().trim() === "pending" && item.slipFilename) {
+                        const safeFilename = encodeURIComponent(item.slipFilename);
+                        tdProof.innerHTML = `<a href="/uploads/${safeFilename}" target="_blank" title="ดูหลักฐาน"><span class="status-badge status-default">ดูบิล</span></a>`;
+                        tdApprove.innerHTML = `<button class="financial-action-btn green" data-id="${item.paymentId}" data-action="approve" title="อนุมัติ"><i class="fa-solid fa-circle-check"></i></button>`;
+                        tdReject.innerHTML = `<button class="financial-action-btn red" data-id="${item.paymentId}" data-action="reject" title="ปฏิเสธ"><i class="fa-solid fa-circle-xmark"></i></button>`;
+                    }
+                    tr.append(tdRoom, tdTenant, tdAmount, tdStatus, tdProof, tdApprove, tdReject);
+                    tbody.appendChild(tr);
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">ไม่พบข้อมูลทางการเงิน</td></tr>';
+            }
+        } catch (err) {
+            console.error("Error fetching accounting:", err);
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:red;">ไม่สามารถโหลดข้อมูลการเงินได้</td></tr>';
+        }
+    }
+
+    async function fetchRepairsFromAPI() {
+        const repairListContainer = document.querySelector(".repair-list");
+        repairListContainer.innerHTML = '<p style="text-align:center;">กำลังโหลดรายการแจ้งซ่อม...</p>';
+        try {
+            const response = await fetch("/api/owner/repairs");
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+            }
+            const data = await response.json();
+            const repairs = data.repairs;
+            repairListContainer.innerHTML = "";
+
+            if (repairs && repairs.length > 0) {
+                repairs.forEach((item) => {
+                    const cardHTML = `
+                        <div class="repair-card" data-status="${item.status}">
+                            <div class="repair-card-info">
+                                <h3><span class="room-number">${safeText(item.roomNumber)}</span> - ${safeText(item.category)}</h3>
+                                <p>${safeText(item.description)}</p>
+                                <div class="meta-info">
+                                    <div class="status-badge-container">${getRepairStatusBadge(item.status)}</div>
+                                    <span>วันที่แจ้ง: ${new Date(item.dateReported).toLocaleDateString("th-TH", { year: "numeric", month: "short", day: "numeric" })}</span>
+                                </div>
+                            </div>
+                            <div class="repair-actions">
+                                <select class="repair-status-update" data-id="${item.id}">
+                                    <option value="pending" ${item.status === "pending" ? "selected" : ""}>รอดำเนินการ</option>
+                                    <option value="inprogress" ${item.status === "inprogress" ? "selected" : ""}>กำลังดำเนินการ</option>
+                                    <option value="done" ${item.status === "done" ? "selected" : ""}>ซ่อมเสร็จแล้ว</option>
+                                </select>
+                            </div>
+                        </div>`;
+                    repairListContainer.insertAdjacentHTML("beforeend", cardHTML);
+                });
+            } else {
+                repairListContainer.innerHTML = '<p style="text-align:center;">ไม่มีรายการแจ้งซ่อม</p>';
+            }
+        } catch (error) {
+            console.error("Error fetching repair data:", error);
+            repairListContainer.innerHTML = '<p style="text-align:center; color:red;">เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
+        }
+    }
+
+    function handleRepairStatusUpdate(event) {
+        const selectElement = event.target;
+        if (!selectElement.classList.contains("repair-status-update")) return;
+
+        const repairId = selectElement.dataset.id;
+        const newStatus = selectElement.value;
+        const card = selectElement.closest(".repair-card");
+        card.classList.add("updating");
+
+        fetch("/api/owner/repairs/update-status", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ repairId: repairId, status: newStatus }),
+            })
+            .then((res) => {
+                if (!res.ok) {
+                    return res.json().then((err) => Promise.reject(err));
+                }
+                return res.json();
+            })
+            .then((data) => {
+                if (data.success) {
+                    card.dataset.status = newStatus;
+                    const badgeContainer = card.querySelector(".status-badge-container");
+                    if (badgeContainer) {
+                        badgeContainer.innerHTML = getRepairStatusBadge(newStatus);
+                    }
+                } else {
+                    throw new Error(data.message || "Update failed");
+                }
+            })
+            .catch((err) => {
+                console.error("Failed to update status:", err);
+                alert("อัปเดตสถานะไม่สำเร็จ!");
+                fetchRepairsFromAPI();
+            })
+            .finally(() => {
+                card.classList.remove("updating");
+            });
+    }
+
+    function handleAccountingClick(event) {
+        const btn = event.target.closest(".financial-action-btn");
+        if (!btn) return;
+
+        const paymentId = btn.getAttribute("data-id");
+        const action = btn.getAttribute("data-action");
+        if (!paymentId || !action) return;
+
+        if (action === "reject") {
+            alert("ฟังก์ชันปฏิเสธยังไม่พร้อมใช้งาน");
+            return;
+        }
+
+        const confirmMsg = "คุณแน่ใจไหมที่จะอนุมัติการชำระเงินนี้?";
+        if (!confirm(confirmMsg)) {
+            return;
+        }
+
+        // This is the corrected endpoint for approving payments
+        fetch(`/api/owner/approve-payment`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ paymentId }),
+            })
+            .then(res => {
+                if (!res.ok) {
+                    return res.json().then(err => Promise.reject(err));
+                }
+                return res.json();
+            })
+            .then((json) => {
+                alert(json.message || "ดำเนินการสำเร็จ");
+                fetchAccountingData(); // Refresh the table
+            })
+            .catch((err) => {
+                console.error("Error in accounting action:", err);
+                alert("เกิดข้อผิดพลาดในการดำเนินการ: " + (err.error || 'Unknown error'));
+            });
+    }
+
+    const waterRate = 18;
+    const elecRate = 8;
+    const billingModal = document.getElementById("billing-modal");
+
+    function setupBillingFilters() {
+        const monthFilter = document.getElementById("billing-month-filter");
+        const yearFilter = document.getElementById("billing-year-filter");
+        const months = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+        const currentYear = new Date().getFullYear();
+        const currentMonth = new Date().getMonth();
+
+        months.forEach((month, index) => {
+            const option = new Option(month, index + 1);
+            monthFilter.add(option);
+        });
+        monthFilter.value = currentMonth + 1;
+
+        for (let i = currentYear - 2; i <= currentYear + 1; i++) {
+            const option = new Option(i + 543, i);
+            yearFilter.add(option);
+        }
+        yearFilter.value = currentYear;
+
+        monthFilter.addEventListener("change", fetchBillingData);
+        yearFilter.addEventListener("change", fetchBillingData);
+    }
+
+    async function fetchBillingData() {
+        const month = document.getElementById("billing-month-filter").value;
+        const year = document.getElementById("billing-year-filter").value;
+        const tbody = document.querySelector("#billing-table tbody");
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">กำลังโหลดข้อมูล...</td></tr>';
+
+        try {
+            const res = await fetch(`/api/owner/billing?month=${month}&year=${year}`);
+            if (!res.ok) throw new Error("Network response not OK");
+            const json = await res.json();
+            tbody.innerHTML = "";
+
+            if (json.bills && json.bills.length > 0) {
+                json.bills.forEach((bill) => {
+                    const tr = document.createElement("tr");
+                    const total = (bill.rent || 0) + (bill.waterTotal || 0) + (bill.elecTotal || 0) + (bill.others || 0);
+
+                    let statusBadge;
+                    switch (bill.status) {
+                        case "paid":
+                            statusBadge = '<span class="status-badge status-paid">ชำระแล้ว</span>';
+                            break;
+                        case "pending":
+                            statusBadge = '<span class="status-badge status-pending">รอชำระ</span>';
+                            break;
+                        default:
+                            statusBadge = '<span class="status-badge status-overdue">ยังไม่แจ้งยอด</span>';
+                    }
+
+                    tr.innerHTML = `
+                        <td>${safeText(bill.roomNumber)}</td>
+                        <td>${safeText(bill.tenantName)}</td>
+                        <td>${(bill.rent || 0).toLocaleString()}</td>
+                        <td>${(bill.waterTotal || 0).toLocaleString()}</td>
+                        <td>${(bill.elecTotal || 0).toLocaleString()}</td>
+                        <td>${total.toLocaleString()}</td>
+                        <td>${statusBadge}</td>
+                        <td class="action-icons">
+                            <button class="manage-bill-btn" data-bill-id="${bill.id}" title="จัดการบิล"><i class="fa-solid fa-pencil"></i></button>
+                        </td>`;
+                    tbody.appendChild(tr);
+                });
+                document.querySelectorAll(".manage-bill-btn").forEach((btn) => {
+                    btn.addEventListener("click", () => openBillingModal(btn.dataset.billId));
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">ไม่พบข้อมูลบิลสำหรับเดือนที่เลือก</td></tr>';
+            }
+        } catch (err) {
+            console.error("Error fetching billing data:", err);
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:red;">ไม่สามารถโหลดข้อมูลได้</td></tr>';
+        }
+    }
+
+    async function openBillingModal(billId) {
+        console.log("Opening modal for bill ID:", billId);
+        const mockBillDetails = {
+            id: billId,
+            roomNumber: "A101",
+            month: 9,
+            year: 2025,
+            rent: 4500,
+            others: 0,
+            waterPrev: 100,
+            waterCurr: 110,
+            elecPrev: 2000,
+            elecCurr: 2050,
+        };
+
+        document.getElementById("modal-title").textContent = `จัดการบิลห้อง ${mockBillDetails.roomNumber}`;
+        document.getElementById("billing-id").value = mockBillDetails.id;
+        document.getElementById("bill-rent").value = mockBillDetails.rent;
+        document.getElementById("bill-others").value = mockBillDetails.others;
+        document.getElementById("bill-water-prev").value = mockBillDetails.waterPrev;
+        document.getElementById("bill-water-curr").value = mockBillDetails.waterCurr;
+        document.getElementById("bill-elec-prev").value = mockBillDetails.elecPrev;
+        document.getElementById("bill-elec-curr").value = mockBillDetails.elecCurr;
+
+        calculateBillTotals();
+        billingModal.classList.remove("hidden");
+    }
+
+    function closeBillingModal() {
+        billingModal.classList.add("hidden");
+        document.getElementById("billing-details-form").reset();
+    }
+
+    function calculateBillTotals() {
+        const rent = parseFloat(document.getElementById("bill-rent").value) || 0;
+        const others = parseFloat(document.getElementById("bill-others").value) || 0;
+        const waterPrev = parseFloat(document.getElementById("bill-water-prev").value) || 0;
+        const waterCurr = parseFloat(document.getElementById("bill-water-curr").value) || 0;
+        const waterUnits = waterCurr > waterPrev ? waterCurr - waterPrev : 0;
+        const waterTotal = waterUnits * waterRate;
+        document.getElementById("bill-water-units").value = waterUnits.toFixed(2);
+        document.getElementById("bill-water-total").value = waterTotal.toFixed(2);
+
+        const elecPrev = parseFloat(document.getElementById("bill-elec-prev").value) || 0;
+        const elecCurr = parseFloat(document.getElementById("bill-elec-curr").value) || 0;
+        const elecUnits = elecCurr > elecPrev ? elecCurr - elecPrev : 0;
+        const elecTotal = elecUnits * elecRate;
+        document.getElementById("bill-elec-units").value = elecUnits.toFixed(2);
+        document.getElementById("bill-elec-total").value = elecTotal.toFixed(2);
+
+        const grandTotal = rent + others + waterTotal + elecTotal;
+        document.getElementById("bill-grand-total").textContent = grandTotal.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    document.querySelector(".close-modal-btn").addEventListener("click", closeBillingModal);
+    billingModal.addEventListener("click", (e) => {
+        if (e.target === billingModal) closeBillingModal();
+    });
+
+    document.getElementById("billing-details-form").addEventListener("input", (e) => {
+        if (e.target.type === "number") {
+            calculateBillTotals();
+        }
+    });
+
+    document.getElementById("billing-details-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+        console.log("Saving bill data:", data);
+        alert("บันทึกข้อมูลและแจ้งยอดสำเร็จ (จำลอง)");
+        closeBillingModal();
+        fetchBillingData();
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        fetchUserInfo();
+        updateDashboard();
+        fetchTenantsFromAPI();
+        fetchRoomsFromAPI();
+        fetchAccountingData();
+        fetchRepairsFromAPI();
+        fetchContractsFromAPI();
+        setupBillingFilters();
+        fetchBillingData();
+
+        const navItems = document.querySelectorAll(".sidebar-nav li");
+        const contentSections = document.querySelectorAll(".content-section");
+        const mainHeader = document.getElementById("main-header");
+        const annForm = document.getElementById("announcement-form");
+
+        async function loadContracts() {
+        const contractsTableBody = document.querySelector("#contracts-section tbody");
+        contractsTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">กำลังโหลดข้อมูล...</td></tr>`;
+
+        try {
+            const response = await fetch('/api/owner/leases');
+            if (!response.ok) {
+                throw new Error('Failed to fetch contracts');
+            }
+            const contracts = await response.json();
+
+            contractsTableBody.innerHTML = ""; // Clear loading message
+            if (contracts.length === 0) {
+                contractsTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">ไม่พบข้อมูลสัญญาเช่า</td></tr>`;
+                return;
+            }
+
+            contracts.forEach(contract => {
+                const statusClass = contract.status === 'active' ? 'status-paid' : 'status-overdue';
+                const statusText = contract.status === 'active' ? 'ใช้งาน' : 'หมดอายุ';
+
+                const row = `
+                    <tr data-id="${contract.id}">
+                        <td>${contract.room_number}</td>
+                        <td>${contract.tenant_name}</td>
+                        <td>${new Date(contract.start_date).toLocaleDateString('th-TH')}</td>
+                        <td>${new Date(contract.end_date).toLocaleDateString('th-TH')}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td class="action-icons">
+                            <a href="#" class="edit-contract-btn" title="แก้ไข"><i class="fa-solid fa-pencil"></i></a>
+                            <a href="#" class="delete-contract-btn" title="ลบ"><i class="fa-solid fa-trash-can"></i></a>
+                        </td>
+                    </tr>
+                `;
+                contractsTableBody.insertAdjacentHTML('beforeend', row);
+            });
+        } catch (error) {
+            console.error("Error loading contracts:", error);
+            contractsTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">เกิดข้อผิดพลาดในการโหลดข้อมูล</td></tr>`;
+        }
+    }
+
+    // Navigation logic (เพิ่มการเรียก loadContracts)
+    navItems.forEach(navItem => {
+        navItem.addEventListener("click", () => {
+            // ... (โค้ดส่วนอื่น ๆ ของ navigation)
+
+            // Load data for the specific section if it's the contracts section
+            if (targetSectionId === 'contracts-section') {
+                loadContracts();
+            }
+        });
+    });
+
+
+    // Event delegation for contract actions
+    const contractsSection = document.getElementById('contracts-section');
+    contractsSection.addEventListener('click', (e) => {
+        if (e.target.closest('.delete-contract-btn')) {
+            e.preventDefault();
+            const row = e.target.closest('tr');
+            const contractId = row.dataset.id;
+            const tenantName = row.cells[1].textContent;
+            if (confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบสัญญาของ ${tenantName}?`)) {
+                deleteContract(contractId);
+            }
+        }
+        // Add logic for editing later if needed
+    });
+
+    // Delete function
+    async function deleteContract(contractId) {
+        try {
+            const response = await fetch(`/api/owner/leases/${contractId}`, {
+                method: 'DELETE'
+            });
+            const result = await response.json();
+            if (response.ok && result.success) {
+                alert('ลบสัญญาสำเร็จ');
+                loadContracts(); // Reload the list
+            } else {
+                throw new Error(result.error || 'ไม่สามารถลบสัญญาได้');
+            }
+        } catch (error) {
+            console.error('Error deleting contract:', error);
+            alert(`เกิดข้อผิดพลาด: ${error.message}`);
+        }
+    }
+
+        if (annForm) {
+            annForm.addEventListener("submit", handleAnnouncementSubmit);
+        }
+
+        navItems.forEach((navItem) => {
+            navItem.addEventListener("click", (e) => {
+                e.preventDefault();
+                navItems.forEach((item) => item.classList.remove("active"));
+                navItem.classList.add("active");
+                let targetSectionId = navItem.id.replace("nav-", "") + "-section";
+                if (navItem.id === "nav-repairs" && !document.getElementById("repairs-section")) {
+                    targetSectionId = "repair-section";
+                }
+                contentSections.forEach((sec) => {
+                    if (sec.id === targetSectionId) sec.classList.remove("hidden");
+                    else sec.classList.add("hidden");
+                });
+                const mapHeader = {
+                    "nav-overview": "ภาพรวม",
+                    "nav-tenants": "จัดการผู้เช่า",
+                    "nav-rooms": "จัดการห้องพัก",
+                    "nav-accounting": "บัญชีและการเงิน",
+                    "nav-repairs": "รายการแจ้งซ่อม",
+                    "nav-contracts": "จัดการสัญญาเช่า",
+                    "nav-announcements": "ประกาศ/ข่าวสาร",
+                    "nav-billing": "ค่าเช่า/ค่าน้ำ/ค่าไฟ",
+                    "nav-reports": "รายงานและสถิติ",
+                };
+                mainHeader.textContent = mapHeader[navItem.id] || "Dashboard";
+            });
+        });
+
+        document.getElementById("nav-overview").click();
+
+        const accSection = document.getElementById("accounting-section");
+        accSection.addEventListener("click", handleAccountingClick);
+
+        const repairListContainer = document.querySelector(".repair-list");
+        repairListContainer.addEventListener("change", handleRepairStatusUpdate);
+
+        const repairFilter = document.getElementById("repair-status-filter");
+        repairFilter.addEventListener("change", (e) => {
+            const selectedStatus = e.target.value;
+            const allCards = document.querySelectorAll(".repair-card");
+            allCards.forEach((card) => {
+                if (selectedStatus === "all" || card.dataset.status === selectedStatus) {
+                    card.style.display = "flex";
+                } else {
+                    card.style.display = "none";
                 }
             });
-    </script>
+        });
+    });
+</script>
 </body>
 </html>

@@ -10,119 +10,93 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
-        :root { --primary-color: #552f87; --primary-hover: #44266a; --sidebar-bg: #1f2937; --sidebar-text: #d1d5db; --sidebar-text-hover: #ffffff; --sidebar-active-bg: #374151; --main-bg: #f3f4f6; --card-bg: #ffffff; --text-dark: #111827; --text-light: #6b7280; --border-color: #e5e7eb; --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); --danger-color: #ef4444; --success-color: #22c55e; --rent-due-color: #ef4444; --maintenance-color: #3b82f6; --info-color: #f59e0b; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Kanit', sans-serif; background-color: var(--main-bg); color: var(--text-dark); line-height: 1.6; }
-        .dashboard-layout { display: flex; min-height: 100vh; }
-        .sidebar { width: 260px; background-color: var(--sidebar-bg); color: var(--sidebar-text); display: flex; flex-direction: column; transition: width 0.3s ease; }
-        .sidebar-header { padding: 1.5rem; border-bottom: 1px solid #374151; }
-        .logo { font-size: 1.8rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
-        .sidebar-menu { list-style: none; flex-grow: 1; margin-top: 1rem; }
-        .sidebar-menu a { position: relative; display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; color: var(--sidebar-text); text-decoration: none; transition: background-color 0.2s, color 0.2s; border-left: 3px solid transparent; }
-        .sidebar-menu a:hover { background-color: var(--sidebar-active-bg); color: var(--sidebar-text-hover); }
-        .sidebar-menu a.active { background-color: var(--sidebar-active-bg); color: var(--sidebar-text-hover); border-left-color: var(--primary-color); }
-        .sidebar-menu a i { font-size: 1.2rem; width: 20px; text-align: center; }
-        .sidebar-footer { padding: 1.5rem; border-top: 1px solid #374151; }
-        .logout-button { display: flex; align-items: center; gap: 1rem; text-decoration: none; color: var(--sidebar-text); transition: color 0.2s; }
-        .notification-badge { position: absolute; top: 10px; left: 45px; background-color: var(--danger-color); color: white; font-size: 0.7rem; font-weight: bold; width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid var(--sidebar-bg); }
-        .main-content { flex-grow: 1; padding: 2rem; overflow-y: auto; }
-        .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-        .main-header h1 { font-size: 2.2rem; }
-        .user-info { font-weight: 500; }
-        .content-panel { display: none; animation: fadeIn 0.5s ease-in-out; }
-        .content-panel.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .overview-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        .card, .panel-card { background-color: var(--card-bg); padding: 1.5rem; border-radius: 12px; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
-        .card-header { display: flex; align-items: flex-start; gap: 1rem; }
-        .card-icon { background-color: var(--primary-color); color: #fff; width: 50px; height: 50px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; flex-shrink: 0; }
-        .card-content h3 { font-size: 1rem; color: var(--text-light); font-weight: 500; margin: 0 0 0.25rem 0; }
-        .card-content p { font-size: 1.8rem; font-weight: 700; margin: 0; }
-        .panel-card h2, .panel-card h3 { font-size: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
-        .reminders-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
-        .reminders-list li { display: flex; align-items: center; gap: 1rem; padding: 1rem; background-color: #f9fafb; border-radius: 8px; border-left: 4px solid; }
-        .reminders-list .rent-due { border-color: var(--rent-due-color); }
-        .reminders-list .maintenance { border-color: var(--maintenance-color); }
-        .reminders-list .info { border-color: var(--info-color); }
-        .reminders-list i { font-size: 1.2rem; }
-        .reminders-list .rent-due i { color: var(--rent-due-color); }
-        .reminders-list .maintenance i { color: var(--maintenance-color); }
-        .reminders-list .info i { color: var(--info-color); }
-        .reminders-list .description { color: var(--text-light); }
-        .payment-breakdown { list-style: none; padding: 0; margin: 1.5rem 0; }
-        .payment-breakdown li { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); }
-        .payment-breakdown li:last-child { border-bottom: none; }
-        .payment-breakdown .item-desc { color: var(--text-light); }
-        .payment-breakdown .item-price { font-weight: 500; }
-        .payment-total { font-size: 1.4rem; font-weight: 700; display: flex; justify-content: space-between; margin-top: 1rem; }
-        .qr-code-container { text-align: center; margin: 2rem 0; border-top: 1px solid var(--border-color); padding-top: 2rem; }
-        .qr-code-container p { margin-bottom: 1rem; font-weight: 500; }
-        .qr-code-img { width: 200px; height: 200px; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; background: #fff; }
-        .qr-code-container .total-amount { font-size: 1.5rem; font-weight: 700; margin-top: 1rem; }
-        .bank-details { margin-top: 2rem; background-color: #f9fafb; padding: 1.5rem; border-radius: 8px; }
-        .bank-details-table { width: 100%; border-collapse: collapse; }
-        .bank-details-table td { padding: 0.6rem 0; }
-        .bank-details-table td:first-child { font-weight: 500; color: var(--text-light); width: 120px; }
-        #slip-upload-section { margin-top: 2.5rem; border-top: 2px solid var(--border-color); padding-top: 2rem; }
-        .form-group { margin-bottom: 1.5rem; }
-        .form-group label { display: block; font-weight: 500; margin-bottom: 0.5rem; }
-        .form-group input[type="file"], .form-group input[type="text"], .form-group input[type="date"], .form-group textarea { display: block; width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: #f9fafb; font-family: 'Kanit', sans-serif; }
-        .submit-btn { background-color: var(--primary-color); color: #fff; padding: 0.8rem 1.5rem; border: none; border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: background-color 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
-        .submit-btn:hover { background-color: var(--primary-hover); }
-        .submit-btn:disabled { background-color: var(--text-light); cursor: not-allowed; }
-        #upload-status { margin-top: 1rem; font-weight: 500; padding: 0.8rem; border-radius: 8px; display: none; }
-        #upload-status.success { background-color: #d1fae5; color: #065f46; display: block; }
-        #upload-status.error { background-color: #fee2e2; color: #991b1b; display: block; }
-        .error-message { text-align: center; padding: 2rem; background-color: #fee2e2; color: #991b1b; border-radius: 8px; font-weight: 500; }
-        .panel-card h3 { font-size: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
-        .repair-list { display: flex; flex-direction: column; gap: 1rem; }
-        .repair-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: #fff; }
-        .repair-details h4 { font-size: 1.1rem; font-weight: 600; margin: 0 0 0.25rem 0; }
-        .repair-description { font-size: 0.9rem; color: var(--text-light); margin: 0; }
-        .repair-status { padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500; color: #fff; white-space: nowrap; }
-        .status-completed { background-color: var(--success-color); }
-        .status-in-progress { background-color: var(--info-color); }
-        .repair-form { display: flex; flex-direction: column; }
-        .form-group { margin-bottom: 1.5rem; display: flex; flex-direction: column; }
-        .form-group label { margin-bottom: 0.5rem; font-weight: 600; color: #333; }
-        .form-group select, .form-group textarea { width: 100%; padding: 0.8rem 1rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; font-family: inherit; background-color: #fff; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
-        .form-group select { background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 0.65em auto; padding-right: 2.5rem; }
-        .form-group textarea { resize: vertical; }
-        .status-badge { display: inline-block; padding: 6px 18px; font-size: 14px; font-weight: bold; color: #ffffff; border-radius: 9999px; text-align: center; white-space: nowrap; }
-        .status-pending { background-color: #ff5656; }
-        .status-in-progress { background-color: #f39c12; }
-        .status-completed { background-color: #27ae60; }
-        .contract-card { background-color: #ffffff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
-        .contract-header h2 { margin-top: 0; margin-bottom: 24px; font-size: 1.2rem; color: #333; display: flex; align-items: center; }
-        .contract-header h2 i { margin-right: 10px; color: #555; }
-        .contract-info-wrapper { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 20px; padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid #e0e0e0; }
-        .contract-info-item { display: flex; flex-direction: column; }
-        .contract-info-item .label { font-size: 0.9rem; color: #666; margin-bottom: 4px; }
-        .contract-info-item .value { font-size: 1rem; font-weight: 500; color: #333; }
-        .contract-actions { text-align: left; }
-        .download-button { display: inline-flex; align-items: center; justify-content: center; background-color: #6200ea; color: #ffffff; padding: 12px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; border: none; cursor: pointer; transition: background-color 0.3s ease; }
-        .download-button:hover { background-color: #5100c6; }
-        .download-button i { margin-right: 8px; }
-        .rules-list { list-style: none; padding: 0; margin-top: 1.5rem; }
-        .rules-list li { display: flex; align-items: center; gap: 1rem; padding: 0.8rem 0; border-bottom: 1px solid var(--border-color); font-size: 1rem; }
-        .rules-list li:last-child { border-bottom: none; }
-        .rules-list i { font-size: 1.2rem; color: var(--primary-color); width: 25px; text-align: center; }
-        .contact-channels { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
-        .channel-item { display: flex; align-items: center; gap: 1rem; padding: 1.25rem; background-color: #f9fafb; border-radius: 8px; border: 1px solid var(--border-color); }
-        .channel-item i { font-size: 1.4rem; color: var(--text-light); width: 30px; text-align: center; }
-        .channel-item span { font-weight: 500; color: var(--text-dark); font-size: 1rem; }
-        #moveout-panel .form-group label { font-size: 1rem; font-weight: 500; color: var(--text-dark); }
-        #moveout-panel .form-group input::placeholder, #moveout-panel .form-group textarea::placeholder { color: #9ca3af; }
-        #moveout-panel p { margin-bottom: 1.5rem; color: var(--text-light); }
-        #moveout-panel .submit-btn { display: inline-flex; align-items: center; gap: 0.5rem; }
-        .profile-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
-        @media (min-width: 768px) { .profile-grid { grid-template-columns: 1fr 1fr; } }
-        .info-group label { display: block; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-light); }
-        .info-group .value-display { width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: #f0f2f5; color: var(--text-dark); font-size: 1rem; }
-        .profile-actions { text-align: right; margin-top: 2rem; }
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap');
+            :root { --primary-color: #3498db; --primary-hover: #2980b9; --sidebar-bg: #2c3e50; --sidebar-text: #ecf0f1; --sidebar-text-hover: #ffffff; --sidebar-active-bg: #34495e; --sidebar-border: #34495e; --main-bg: #f4f6f9; --card-bg: #ffffff; --text-dark: #333333; --text-light: #6c757d; --border-color: #e0e0e0; --shadow: 0 2px 5px rgba(0, 0, 0, 0.07); --danger-color: #e74c3c; --success-color: #2ecc71; --info-color: #f39c12; --maintenance-color: #3498db; }
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font-family: 'Sarabun', sans-serif; background-color: var(--main-bg); color: var(--text-dark); line-height: 1.6; }
+            .dashboard-layout { display: flex; min-height: 100vh; }
+            .main-content { flex-grow: 1; padding: 1.5rem 2rem; overflow-y: auto; }
+            .sidebar { width: 260px; background-color: var(--sidebar-bg); color: var(--sidebar-text); display: flex; flex-direction: column; transition: width 0.3s ease; }
+            .sidebar-header { padding: 1.5rem; border-bottom: 1px solid var(--sidebar-border); }
+            .logo { font-size: 1.5rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+            .sidebar-menu { list-style: none; flex-grow: 1; margin-top: 1rem; }
+            .sidebar-menu a { position: relative; display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; color: var(--sidebar-text); text-decoration: none; transition: background-color 0.2s, color 0.2s; border-left: 4px solid transparent; }
+            .sidebar-menu a:hover { background-color: var(--sidebar-active-bg); color: var(--sidebar-text-hover); }
+            .sidebar-menu a.active { background-color: var(--sidebar-active-bg); color: var(--sidebar-text-hover); border-left-color: var(--primary-color); padding-left: calc(1.5rem - 4px); }
+            .sidebar-menu a i { font-size: 1.1rem; width: 25px; text-align: center; }
+            .sidebar-footer { padding: 1.5rem; border-top: 1px solid var(--sidebar-border); }
+            .logout-button { display: flex; align-items: center; gap: 1rem; text-decoration: none; color: var(--sidebar-text); transition: color 0.2s; }
+            .notification-badge { position: absolute; top: 12px; left: 40px; background-color: var(--danger-color); color: white; font-size: 0.7rem; font-weight: bold; width: 18px; height: 18px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid var(--sidebar-bg); }
+            .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+            .main-header h1 { font-size: 2rem; font-weight: 700; }
+            .user-info { font-weight: 500; color: var(--text-light); }
+            .content-panel { display: none; animation: fadeIn 0.5s ease-in-out; }
+            .content-panel.active { display: block; }
+            @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+            .card, .panel-card { background-color: var(--card-bg); padding: 1.5rem; border-radius: 8px; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
+            .overview-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+            .card-header { display: flex; align-items: center; gap: 1rem; }
+            .card-icon { background-color: var(--primary-color); color: #fff; width: 48px; height: 48px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; flex-shrink: 0; }
+            .card-content h3 { font-size: 0.9rem; color: var(--text-light); font-weight: 500; margin: 0 0 0.25rem 0; text-transform: uppercase; }
+            .card-content p { font-size: 1.8rem; font-weight: 700; margin: 0; }
+            .panel-card h2, .panel-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; }
+            .reminders-list, .repair-list, .rules-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; padding: 0; }
+            .reminders-list li { display: flex; align-items: center; gap: 1rem; padding: 1rem; background-color: #fcfcfc; border-radius: 6px; border-left: 4px solid; }
+            .reminders-list .rent-due { border-color: var(--danger-color); }
+            .reminders-list .maintenance { border-color: var(--maintenance-color); }
+            .reminders-list .info { border-color: var(--info-color); }
+            .reminders-list i { font-size: 1.2rem; }
+            .reminders-list .rent-due i { color: var(--danger-color); }
+            .reminders-list .maintenance i { color: var(--maintenance-color); }
+            .reminders-list .info i { color: var(--info-color); }
+            .rules-list li { display: flex; align-items: center; gap: 1rem; padding: 0.8rem 0; border-bottom: 1px solid var(--border-color); }
+            .rules-list li:last-child { border-bottom: none; }
+            .rules-list i { font-size: 1.2rem; color: var(--primary-color); width: 25px; text-align: center; }
+            .repair-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: #fff; }
+            .repair-details h4 { font-size: 1.1rem; font-weight: 600; margin: 0 0 0.25rem 0; }
+            .repair-description { font-size: 0.9rem; color: var(--text-light); margin: 0; }
+            .repair-status, .status-badge { padding: 0.4rem 0.9rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500; color: #fff; white-space: nowrap; }
+            .status-completed { background-color: var(--success-color); }
+            .status-in-progress { background-color: var(--info-color); }
+            .status-pending { background-color: var(--danger-color); }
+            .form-group { margin-bottom: 1.5rem; }
+            .form-group label { display: block; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-dark); }
+            .form-group input[type="file"], .form-group input[type="text"], .form-group input[type="date"], .form-group textarea, .form-group select { display: block; width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border-color); border-radius: 6px; background-color: #fff; font-family: 'Sarabun', sans-serif; font-size: 1rem; transition: border-color 0.2s, box-shadow 0.2s; }
+            .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2); }
+            .form-group select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236c757d%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 0.65em auto; padding-right: 2.5rem; }
+            .form-group textarea { resize: vertical; min-height: 120px; }
+            .submit-btn, .download-button { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background-color: var(--primary-color); color: #fff; padding: 0.75rem 1.5rem; border: none; border-radius: 6px; font-size: 1rem; font-weight: 500; text-decoration: none; cursor: pointer; transition: background-color 0.2s; }
+            .submit-btn:hover, .download-button:hover { background-color: var(--primary-hover); }
+            .submit-btn:disabled { background-color: var(--text-light); cursor: not-allowed; }
+            .download-button i { margin-right: 8px; }
+            .payment-breakdown { list-style: none; padding: 0; margin: 1.5rem 0; }
+            .payment-breakdown li { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); }
+            .payment-breakdown li:last-child { border-bottom: none; }
+            .payment-breakdown .item-desc { color: var(--text-light); }
+            .payment-breakdown .item-price { font-weight: 500; }
+            .payment-total { font-size: 1.4rem; font-weight: 700; display: flex; justify-content: space-between; margin-top: 1rem; }
+            .qr-code-container { text-align: center; margin: 2rem 0; border-top: 1px solid var(--border-color); padding-top: 2rem; }
+            .qr-code-container p { margin-bottom: 1rem; font-weight: 500; }
+            .qr-code-img { width: 200px; height: 200px; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; background: #fff; }
+            .qr-code-container .total-amount { font-size: 1.5rem; font-weight: 700; margin-top: 1rem; }
+            #slip-upload-section { margin-top: 2.5rem; border-top: 2px solid var(--border-color); padding-top: 2rem; }
+            #upload-status { margin-top: 1rem; font-weight: 500; padding: 0.8rem; border-radius: 8px; display: none; }
+            #upload-status.success { background-color: #d1fae5; color: #065f46; display: block; }
+            #upload-status.error { background-color: #fee2e2; color: #991b1b; display: block; }
+            .contract-header h2 { font-size: 1.2rem; display: flex; align-items: center; }
+            .contract-info-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; padding-bottom: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); }
+            .contract-info-item .label { font-size: 0.9rem; color: var(--text-light); margin-bottom: 4px; }
+            .contract-info-item .value { font-size: 1rem; font-weight: 500; }
+            .contact-channels { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+            .channel-item { display: flex; align-items: center; gap: 1rem; padding: 1.25rem; background-color: #fff; border-radius: 8px; border: 1px solid var(--border-color); }
+            .channel-item i { font-size: 1.4rem; color: var(--text-light); width: 30px; text-align: center; }
+            .profile-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+            @media (min-width: 768px) { .profile-grid { grid-template-columns: 1fr 1fr; } }
+            .info-group label { display: block; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-light); }
+            .info-group .value-display { width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: #f8f9fa; color: var(--text-dark); font-size: 1rem; }
+            .profile-actions { text-align: right; margin-top: 2rem; }
     </style>
 </head>
-<>
     <div class="dashboard-layout">
         <aside class="sidebar">
             <div class="sidebar-header">
@@ -250,17 +224,17 @@
                     </div>
 
                     <div id="slip-upload-section">
-                        <h3><i class="fa-solid fa-cloud-arrow-up"></i> อัปโหลดสลิปชำระเงิน</h3>
-                        <form id="slip-upload-form">
-                            <div class="form-group">
-                                <label for="paymentSlip">เลือกไฟล์สลิป (รูปภาพเท่านั้น)</label>
-                                <input type="file" id="paymentSlip" name="paymentSlip" accept="image/*" required>
-                                <input type="hidden" id="paymentId" name="paymentId">
-                            </div>
-                            <button type="submit" class="submit-btn" id="upload-button">ยืนยันการชำระเงิน</button>
-                        </form>
-                        <div id="upload-status"></div>
-                    </div>
+    <h3><i class="fa-solid fa-cloud-arrow-up"></i> อัปโหลดสลิปชำระเงิน</h3>
+    <form id="slip-upload-form">
+        <div class="form-group">
+            <label for="paymentSlip">เลือกไฟล์สลิป (รูปภาพเท่านั้น)</label>
+            <input type="file" id="paymentSlip" name="paymentSlip" accept="image/*" required>
+            <input type="hidden" id="paymentId" name="paymentId">
+        </div>
+        <button type="submit" class="submit-btn" id="upload-slip-btn">อัปโหลดสลิป</button>
+    </form>
+    <div id="upload-status"></div>
+</div>
                 </div>
             </section>
 
@@ -301,7 +275,7 @@
 
                 <div class="panel-card">
                     <h3><i class="fa-solid fa-list-check"></i> ติดตามสถานะการแจ้งซ่อม</h3>
-                    <div class="repair-list"></div>
+                    <div id="repair-list" class="repair-list"></div>
                 </div>
             </section>
 
@@ -550,66 +524,43 @@
         }
 
         function loadRepairs() {
-            const repairListContainer = document.querySelector('#repairs-panel .repair-list');
-            repairListContainer.innerHTML = '<p>กำลังโหลดข้อมูล...</p>';
+    const repairList = document.getElementById('repair-list');
 
-            fetch('/api/maintenance-requests')
-                .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
-                .then(repairs => {
-                    repairListContainer.innerHTML = '';
+    fetch('/api/maintenance-requests') // <-- แก้ไข URL ให้ถูกต้อง
+        .then(response => response.json())
+        .then(repairs => { // <-- เปลี่ยนชื่อตัวแปรให้สื่อความหมาย
+            repairList.innerHTML = ''; // Clear existing list
+            if (repairs.length > 0) {
+                repairs.forEach(repair => {
+                    const repairItem = document.createElement('div');
+                    repairItem.className = 'repair-item status-box'; // เพิ่ม class เพื่อความสวยงาม
 
-                    if (repairs.length === 0) {
-                        repairListContainer.innerHTML = '<p>ยังไม่มีรายการแจ้งซ่อม</p>';
-                        return;
-                    }
+                    // แปลงสถานะเป็นภาษาไทย
+                    let statusText = 'กำลังดำเนินการ';
+                    if (repair.status === 'completed') statusText = 'ซ่อมสำเร็จ';
+                    if (repair.status === 'pending') statusText = 'รอรับเรื่อง';
 
-                    const formatStatus = (status) => {
-                        switch (status) {
-                            case 'pending':
-                                return { text: 'รอดำเนินการ', class: 'status-pending' };
-                            case 'in_progress':
-                                return { text: 'กำลังดำเนินการ', class: 'status-in-progress' };
-                            case 'completed':
-                                return { text: 'เสร็จสิ้น', class: 'status-completed' };
-                            default:
-                                return { text: status, class: '' };
-                        }
-                    };
-
-                    repairs.forEach(repair => {
-                        const statusInfo = formatStatus(repair.status);
-                        const repairItemHTML = `
-                            <div class="repair-item">
-                                <div class="repair-details">
-                                    <h4>${repair.issue_type}</h4>
-                                    <p class="repair-description">${repair.details || 'ไม่มีรายละเอียดเพิ่มเติม'}</p>
-                                </div>
-                                <span class="repair-status ${statusInfo.class}">${statusInfo.text}</span>
-                            </div>`;
-                        repairListContainer.insertAdjacentHTML('beforeend', repairItemHTML);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching repair data:', error);
-                    repairListContainer.innerHTML = '';
-                    const mockRepairs = [{
-                        issue_type: "แอร์ไม่เย็น",
-                        details: "เปิดแล้วมีแต่ลมออกมา",
-                        status: "in_progress"
-                    }, {
-                        issue_type: "น้ำรั่ว",
-                        details: "น้ำรั่วซึมจากก๊อกในห้องน้ำ",
-                        status: "completed"
-                    }];
-                    mockRepairs.forEach(repair => {
-                        const statusInfo = {
-                            'in_progress': { text: 'กำลังดำเนินการ', class: 'status-in-progress' },
-                            'completed': { text: 'เสร็จสิ้น', class: 'status-completed' }
-                        }[repair.status];
-                        repairListContainer.innerHTML += `<div class="repair-item"><div class="repair-details"><h4>${repair.issue_type}</h4><p class="repair-description">${repair.details}</p></div><span class="repair-status ${statusInfo.class}">${statusInfo.text}</span></div>`;
-                    });
+                    repairItem.innerHTML = `
+                        <div class="repair-header">
+                            <strong>ประเภท: ${repair.issue_type}</strong>
+                            <span class="status-${repair.status}">${statusText}</span>
+                        </div>
+                        <p class="repair-details"><strong>รายละเอียด:</strong> ${repair.details}</p>
+                        <div class="repair-footer">
+                            <span><strong>วันที่แจ้ง:</strong> ${new Date(repair.created_at).toLocaleDateString('th-TH')}</span>
+                        </div>
+                    `;
+                    repairList.appendChild(repairItem);
                 });
-        }
+            } else {
+                repairList.innerHTML = '<p>ยังไม่มีรายการแจ้งซ่อม</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching repairs:', error);
+            repairList.innerHTML = '<p>เกิดข้อผิดพลาดในการเชื่อมต่อ ไม่สามารถโหลดข้อมูลได้</p>';
+        });
+}
 
         function fetchContractDetails() {
             fetch('/api/contract-details')
@@ -694,12 +645,34 @@
 
         function handleNewRepairSubmit() {
             const form = document.getElementById('new-repair-form');
-            if (!form) return;
-
-            form.addEventListener('submit', function(event) {
+            form.addEventListener('submit', async (event) => {
                 event.preventDefault();
-                alert('แจ้งซ่อมสำเร็จ! (Demo)');
-                form.reset();
+
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+
+                try {
+                    const response = await fetch('/api/repairs', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        alert('ส่งเรื่องแจ้งซ่อมสำเร็จ!');
+                        form.reset();
+                        loadRepairs(); 
+                    } else {
+                        alert(`เกิดข้อผิดพลาด: ${result.error}`);
+                    }
+                } catch (error) {
+                    console.error('Error submitting repair request:', error);
+                    alert('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้');
+                }
             });
         }
 
@@ -806,21 +779,55 @@
         }
 
         function handleSlipUpload() {
-            const form = document.getElementById('slip-upload-form');
-            if (!form) return;
+    const form = document.getElementById('slip-upload-form');
+    const statusDiv = document.getElementById('upload-status');
+    const submitBtn = document.getElementById('upload-slip-btn');
 
-            form.addEventListener('submit', (event) => {
-                event.preventDefault();
-                const statusDiv = document.getElementById('upload-status');
-                statusDiv.className = 'success';
-                statusDiv.textContent = '✔ อัปโหลดสลิปสำเร็จ! (Demo)';
-                statusDiv.style.display = 'block';
-                setTimeout(() => {
-                    form.reset();
-                    statusDiv.style.display = 'none';
-                }, 3000);
-            });
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        statusDiv.style.display = 'none';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'กำลังอัปโหลด...';
+
+        const formData = new FormData(form);
+        const paymentId = document.getElementById('paymentId').value;
+        if (!paymentId) {
+            showStatus('ไม่พบ ID การชำระเงิน กรุณารีเฟรชหน้า', 'error');
+            submitBtn.disabled = false;
+            return;
         }
+        formData.set('paymentId', paymentId);
+
+        try {
+            const response = await fetch('/api/upload-slip', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                showStatus('อัปโหลดสลิปสำเร็จ!', 'success');
+                form.reset();
+                // อาจจะโหลดข้อมูลการชำระเงินใหม่
+                fetchBillingDetails(); 
+            } else {
+                showStatus(result.error || 'เกิดข้อผิดพลาดในการอัปโหลด', 'error');
+            }
+        } catch (error) {
+            showStatus('การเชื่อมต่อล้มเหลว กรุณาลองใหม่อีกครั้ง', 'error');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'อัปโหลดสลิป';
+        }
+    });
+
+    function showStatus(message, type) {
+        statusDiv.className = type;
+        statusDiv.textContent = message;
+        statusDiv.style.display = 'block';
+    }
+}
 
         function setupSidebarNavigation() {
             const sidebarLinks = document.querySelectorAll('.sidebar-menu a[data-target]');
