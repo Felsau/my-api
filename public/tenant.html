@@ -228,7 +228,7 @@
     <form id="slip-upload-form">
         <div class="form-group">
             <label for="paymentSlip">เลือกไฟล์สลิป (รูปภาพเท่านั้น)</label>
-            <input type="file" id="paymentSlip" name="paymentSlip" accept="image/*" required>
+            <input type="file" id="paymentSlip" name="paymentSlip" accept="image/*,.pdf" required>
             <input type="hidden" id="paymentId" name="paymentId">
         </div>
         <button type="submit" class="submit-btn" id="upload-slip-btn">อัปโหลดสลิป</button>
@@ -564,84 +564,90 @@
 
         function fetchContractDetails() {
             fetch('/api/contract-details')
-                .then(response => response.ok ? response.json() : Promise.reject('ไม่สามารถโหลดข้อมูลสัญญาได้'))
-                .then(data => {
-                    const formatDate = (dateString) => new Date(dateString).toLocaleDateString('th-TH', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    });
+    .then(response => response.ok ? response.json() : Promise.reject())
+    .then(data => {
+      const formatDate = (d) => new Date(d).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+      document.getElementById('contract-tenant-name').textContent = data.tenant_name || 'N/A';
+      document.getElementById('contract-room-number').textContent = data.room_number || 'N/A';
+      document.getElementById('contract-start-date').textContent = formatDate(data.start_date);
+      document.getElementById('contract-end-date').textContent = formatDate(data.end_date);
+      document.getElementById('contract-rent-rate').textContent = `${(data.rent_rate || 0).toLocaleString()} บาท/เดือน`;
 
-                    document.getElementById('contract-tenant-name').textContent = data.tenant_name || 'N/A';
-                    document.getElementById('contract-room-number').textContent = data.room_number || 'N/A';
-                    document.getElementById('contract-start-date').textContent = formatDate(data.start_date);
-                    document.getElementById('contract-end-date').textContent = formatDate(data.end_date);
-                    document.getElementById('contract-rent-rate').textContent = `${(data.rent_rate || 0).toLocaleString()} บาท/เดือน`;
-
-                    const downloadLink = document.getElementById('download-contract-link');
-                    if (data.contract_url) {
-                        downloadLink.href = data.contract_url;
-                        downloadLink.style.display = 'inline-flex';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching contract details:', error);
-                    const formatDate = (dateString) => new Date(dateString).toLocaleDateString('th-TH', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    });
-                    document.getElementById('contract-tenant-name').textContent = 'สมศรี ใจดี';
-                    document.getElementById('contract-room-number').textContent = 'A201';
-                    document.getElementById('contract-start-date').textContent = formatDate('2025-01-01');
-                    document.getElementById('contract-end-date').textContent = formatDate('2025-12-31');
-                    document.getElementById('contract-rent-rate').textContent = '5,000 บาท/เดือน';
-                    const downloadLink = document.getElementById('download-contract-link');
-                    downloadLink.href = "#";
-                    downloadLink.style.display = 'inline-flex';
-                });
-        }
+      const downloadLink = document.getElementById('download-contract-link');
+      if (data.contract_url) {
+        downloadLink.href = data.contract_url;
+        downloadLink.style.display = 'inline-flex';
+      } else {
+        downloadLink.style.display = 'none';
+      }
+    })
+    .catch(() => {
+      // แสดงข้อความผิดพลาดแทนการใส่ข้อมูลจำลอง
+      const box = document.getElementById('contract-section');
+      if (box) {
+        box.querySelector('.contract-info-wrapper')?.classList.add('error');
+      }
+      document.getElementById('contract-tenant-name').textContent = '—';
+      document.getElementById('contract-room-number').textContent = '—';
+      document.getElementById('contract-start-date').textContent = '—';
+      document.getElementById('contract-end-date').textContent = '—';
+      document.getElementById('contract-rent-rate').textContent = '—';
+      const downloadLink = document.getElementById('download-contract-link');
+      downloadLink.style.display = 'none';
+    });
+}
 
         function fetchBillingDetails() {
+
             fetch('/api/billing-details')
-                .then(response => response.ok ? response.json() : Promise.reject('Could not fetch billing details'))
-                .then(data => {
-                    const formatNumber = (num) => num.toLocaleString('th-TH', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    });
-                    const formatInteger = (num) => num.toLocaleString('th-TH');
-
-                    document.getElementById('rent-amount').textContent = `${formatInteger(data.room_rent)} บาท`;
-                    document.getElementById('water-amount').textContent = `${formatInteger(data.water_bill)} บาท`;
-                    document.getElementById('electricity-amount').textContent = `${formatNumber(data.electricity_bill)} บาท`;
-                    document.getElementById('total-amount').textContent = `${formatNumber(data.total_amount)} บาท`;
-
-                    const totalAmountForQR = data.total_amount.toFixed(2);
-                    const promptPayId = '0999999999';
-                    const qrImg = document.getElementById('qr-code-img');
-
-                    qrImg.src = `https://promptpay.io/${promptPayId}/${totalAmountForQR}.png`;
-                    qrImg.style.visibility = 'visible';
-                    document.getElementById('qr-total-amount').textContent = `ยอดรวม: ${formatNumber(data.total_amount)} บาท`;
+                .then(response => {
+                    if (!response.ok) throw new Error('NETWORK');
+                    return response.json();
                 })
-                .catch(error => {
-                    console.error('Error fetching billing details:', error);
-                    const formatNumber = (num) => num.toLocaleString('th-TH', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    });
-                    const formatInteger = (num) => num.toLocaleString('th-TH');
-                    document.getElementById('rent-amount').textContent = `${formatInteger(5000)} บาท`;
-                    document.getElementById('water-amount').textContent = `${formatInteger(150)} บาท`;
-                    document.getElementById('electricity-amount').textContent = `${formatNumber(350.75)} บาท`;
-                    document.getElementById('total-amount').textContent = `${formatNumber(5500.75)} บาท`;
-                    const qrImg = document.getElementById('qr-code-img');
-                    qrImg.src = `https://promptpay.io/0999999999/5500.75.png`;
-                    qrImg.style.visibility = 'visible';
-                    document.getElementById('qr-total-amount').textContent = `ยอดรวม: ${formatNumber(5500.75)} บาท`;
+                .then(data => {
+                    const formatNumber = (num) => Number(num || 0).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    const formatInteger = (num) => Number(num || 0).toLocaleString('th-TH');
+
+                    const rent = data?.room_rent ?? 0;
+                    const water = data?.water_bill ?? 0;
+                    const elec  = data?.electricity_bill ?? 0;
+                    const total = data?.total_amount ?? 0;
+
+                    const rentEl  = document.getElementById('rent-amount');
+                    const waterEl = document.getElementById('water-amount');
+                    const elecEl  = document.getElementById('electricity-amount');
+                    const totalEl = document.getElementById('total-amount');
+                    const qrImg   = document.getElementById('qr-code-img');
+                    const qrText  = document.getElementById('qr-total-amount');
+
+                    if (rentEl)  rentEl.textContent  = `${formatInteger(rent)} บาท`;
+                    if (waterEl) waterEl.textContent = `${formatInteger(water)} บาท`;
+                    if (elecEl)  elecEl.textContent  = `${formatNumber(elec)} บาท`;
+                    if (totalEl) totalEl.textContent = `${formatNumber(total)} บาท`;
+
+                    const showQR = total > 0 && (data?.status ? String(data.status).toLowerCase() !== 'paid' : true);
+                    if (showQR) {
+                        const promptPayId = (data && data.promptpay_id) ? String(data.promptpay_id) : '0999999999';
+                        const totalAmountForQR = Number(total).toFixed(2);
+                        if (qrImg) {
+                            qrImg.src = `https://promptpay.io/${promptPayId}/${totalAmountForQR}.png`;
+                            qrImg.style.visibility = 'visible';
+                        }
+                        if (qrText) qrText.textContent = `ยอดรวม: ${formatNumber(total)} บาท`;
+                    } else {
+                        if (qrImg) { qrImg.removeAttribute('src'); qrImg.style.visibility = 'hidden'; }
+                        if (qrText) qrText.textContent = 'ไม่มีบิลที่ต้องชำระ';
+                    }
+                })
+                .catch(err => {
+                    console.error('Error fetching billing details:', err);
+                    const qrImg  = document.getElementById('qr-code-img');
+                    const qrText = document.getElementById('qr-total-amount');
+                    if (qrImg) { qrImg.removeAttribute('src'); qrImg.style.visibility = 'hidden'; }
+                    if (qrText) qrText.textContent = 'ไม่พบข้อมูลบิลในขณะนี้';
                 });
-        }
+
+}
 
         function handleNewRepairSubmit() {
             const form = document.getElementById('new-repair-form');
@@ -652,7 +658,7 @@
                 const data = Object.fromEntries(formData.entries());
 
                 try {
-                    const response = await fetch('/api/repairs', {
+                    const response = await fetch('/api/maintenance-requests', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -679,13 +685,36 @@
         function handleContactFormSubmit() {
             const form = document.getElementById('quick-message-form');
             const feedbackDiv = document.getElementById('form-feedback');
+            const textarea = document.getElementById('quick-message-text');
+            const submitBtn = form ? form.querySelector('button[type="submit"]') : null;
             if (!form) return;
 
-            form.addEventListener('submit', function(event) {
+            form.addEventListener('submit', async function(event) {
                 event.preventDefault();
-                feedbackDiv.textContent = 'ส่งข้อความสำเร็จแล้ว! (Demo)';
-                feedbackDiv.style.color = 'green';
-                form.reset();
+                const message = textarea ? textarea.value.trim() : '';
+                if (!message) {
+                    if (feedbackDiv) { feedbackDiv.textContent = 'พิมพ์ข้อความก่อนส่ง'; feedbackDiv.style.color = 'red'; }
+                    return;
+                }
+                try {
+                    if (submitBtn) { submitBtn.disabled = true; submitBtn.dataset._oldText = submitBtn.textContent; submitBtn.textContent = 'กำลังส่ง...'; }
+                    const res = await fetch('/api/contact-message', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message })
+                    });
+                    const json = await res.json().catch(() => ({}));
+                    if (res.ok && (json.success === true || !json.error)) {
+                        if (feedbackDiv) { feedbackDiv.textContent = json.message || 'ส่งข้อความสำเร็จแล้ว'; feedbackDiv.style.color = 'green'; }
+                        form.reset();
+                    } else {
+                        throw new Error(json.error || 'ส่งไม่สำเร็จ');
+                    }
+                } catch (err) {
+                    if (feedbackDiv) { feedbackDiv.textContent = err.message || 'ส่งไม่สำเร็จ'; feedbackDiv.style.color = 'red'; }
+                } finally {
+                    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = submitBtn.dataset._oldText || 'ส่งข้อความ'; }
+                }
             });
         }
 
