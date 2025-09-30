@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>บ้านพักกัน — หอพักใกล้มอ ราคาดี อยู่สบาย</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: "#eef6ff",
+                100: "#daedff",
+                200: "#b6dbff",
+                300: "#8cc4ff",
+                400: "#62a9ff",
+                500: "#3a8bff",
+                600: "#206cf2",
+                700: "#1655c6",
+                800: "#1548a1",
+                900: "#143f86",
+              },
+              ink: "#0f172a",
+              soft: "#f6f7fb",
+            },
+            boxShadow: { card: "0 10px 30px rgba(15,23,42,.08)" },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html,
+      body {
+        font-family: "Prompt", system-ui, -apple-system, Segoe UI, Roboto,
+          "Noto Sans Thai", sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-soft text-slate-700">
+    <!-- NAV -->
+    <header
+      class="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-slate-200"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between"
+      >
+        <a class="flex items-center gap-2" href="#home">
+          <span
+            class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary-600 text-white font-semibold"
+            >BK</span
+          >
+          <span class="font-semibold text-slate-900">บ้านพักกัน</span>
+        </a>
+        <nav class="hidden md:flex items-center gap-8 text-md">
+          <a class="hover:text-primary-700" href="#home">หน้าหลัก</a>
+          <a class="hover:text-primary-700" href="#rooms">ห้องพัก</a>
+          <a class="hover:text-primary-700" href="#status">สถานะห้อง</a>
+          <a class="hover:text-primary-700" href="#faq">คำถามที่พบบ่อย</a>
+          <a class="hover:text-primary-700" href="#contact">ติดต่อเรา</a>
+        </nav>
+        <div class="flex items-center gap-3">
+          <a id="openLogin"
+            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl 
+                    bg-gradient-to-r from-primary-600 to-primary-500 
+                    text-white font-semibold shadow-lg hover:shadow-xl 
+                    hover:translate-y-[-1px] transition cursor-pointer">
+            เข้าสู่ระบบ
+          </a>
+
+
+        </div>
+      </div>
+    </header>
+
+<section id="home" class="relative overflow-hidden">
+  <img
+    class="absolute inset-0 w-full h-full object-cover"
+    src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=2000&auto=format&fit=crop"
+    alt="บรรยากาศหอพักคุณภาพใกล้มหาวิทยาลัย"
+  />
+  <div class="absolute inset-0 bg-gradient-to-br from-white/85 via-white/70 to-white/30 backdrop-blur-[2px]"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="pt-20 pb-24 lg:pt-28 lg:pb-32 grid lg:grid-cols-2 gap-8 items-center">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-100 text-primary-700 text-xs font-medium shadow-sm">
+          ✅ มีห้องว่างอัปเดตทุกวัน • หน้าม.พะเยา
+        </div>
+
+        <h1 class="mt-4 text-4xl sm:text-5xl font-extrabold leading-tight text-ink">
+          บ้านพักกัน — หอพักคุณภาพ
+          <span class="block">หน้ามหาวิทยาลัยพะเยา</span>
+        </h1>
+        <p class="mt-4 text-slate-600 max-w-2xl">
+          เดินทางสะดวก สิ่งอำนวยความสะดวกครบ Wi-Fi ความเร็วสูง ระบบความปลอดภัย และที่จอดรถครบ ตอบโจทย์ชีวิตนักศึกษาและคนทำงาน
+        </p>
+        <div class="mt-5 flex flex-wrap gap-4 text-sm text-slate-600">
+          <div class="inline-flex items-center gap-2">
+            <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary-600 text-white text-[12px]">24h</span>
+            เข้า-ออกอาคาร 24 ชม.
+          </div>
+          <div class="inline-flex items-center gap-2">
+            <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary-600 text-white text-[12px]">🛡️</span>
+            กล้องวงจรปิดและดูแลความปลอดภัย
+          </div>
+          <div class="inline-flex items-center gap-2">
+            <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary-600 text-white text-[12px]">📶</span>
+            Wi-Fi ความเร็วสูง
+          </div>
+        </div>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#rooms"
+             class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-primary-600 text-white font-semibold shadow-lg hover:shadow-xl hover:translate-y-[-1px] transition">
+            🔎 ดูห้องว่าง
+          </a>
+          <a href="#contact"
+             class="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-slate-300 text-ink bg-white/70 hover:bg-white shadow-sm">
+            ✉️ ติดต่อเรา
+          </a>
+        </div>
+
+        <div class="mt-6 flex flex-wrap gap-6 text-sm text-slate-600">
+          <div><span class="font-semibold text-ink">2 ประเภท</span> ห้องพัก</div>
+          <div><span class="font-semibold text-ink">5 นาที</span> ถึงประตู ม.พะเยา</div>
+        </div>
+      </div>
+
+      <div class="hidden lg:block">
+        <div class="rounded-3xl bg-white/70 backdrop-blur shadow-card border border-white/60 overflow-hidden">
+          <img
+            class="w-full aspect-[16/9] object-cover"
+            src="https://images.unsplash.com/photo-1501045661006-fcebe0257c3f?q=80&w=1200&auto=format&fit=crop"
+          />
+          <div class="p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-sm text-slate-500">เริ่มต้นเพียง</div>
+                <div class="text-xl font-extrabold text-ink">3,000 บ./เดือน</div>
+              </div>
+              <a href="#booking"
+                 class="px-4 py-2 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700">
+                จองทันที
+              </a>
+            </div>
+            <ul class="grid grid-cols-2 gap-x-6 gap-y-2 text-slate-700 text-sm">
+              <li class="flex items-center gap-2">
+                <i data-lucide="bed" class="w-5 h-5 text-primary-600"></i>
+                เตียง 6 ฟุต
+              </li>
+              <li class="flex items-center gap-2">
+                <i data-lucide="archive" class="w-5 h-5 text-primary-600"></i>
+                ตู้เสื้อผ้า
+              </li>
+              <li class="flex items-center gap-2">
+                <i data-lucide="shower-head" class="w-5 h-5 text-primary-600"></i>
+                เครื่องทำน้ำอุ่น
+              </li>
+              <li class="flex items-center gap-2">
+                <i data-lucide="fan" class="w-5 h-5 text-primary-600"></i>
+                เครื่องปรับอากาศ
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+</section>
+
+    <section class="py-10 bg-white">
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-3 gap-6"
+      >
+        <div class="rounded-2xl border border-slate-200 p-6">
+          <div class="text-2xl">📍</div>
+          <div class="mt-2 font-semibold text-ink">ทำเล</div>
+          <p class="text-sm text-slate-600 mt-1">
+            หน้ามหาวิทยาลัยพะเยา ต.แม่กา อ.เมือง จ.พะเยา 56000
+          </p>
+        </div>
+        <div class="rounded-2xl border border-slate-200 p-6">
+          <div class="text-2xl">🕒</div>
+          <div class="mt-2 font-semibold text-ink">เวลาให้บริการ</div>
+          <p class="text-sm text-slate-600 mt-1">
+            สำนักงาน 09:00–18:00 น. ทุกวันจันทร์–เสาร์ / เข้า–ออกอาคารได้ 24 ชม.
+          </p>
+        </div>
+        <div class="rounded-2xl border border-slate-200 p-6">
+          <div class="text-2xl">💳</div>
+          <div class="mt-2 font-semibold text-ink">ช่องทางชำระเงิน</div>
+          <p class="text-sm text-slate-600 mt-1">
+            โอน/พร้อมเพย์/เงินสด
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="rooms" class="py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-end justify-between">
+          <h2 class="text-2xl font-semibold text-ink">ประเภทห้องพัก</h2>
+        </div>
+
+    <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-8">
+      <article class="bg-white rounded-2xl shadow-card overflow-hidden border border-slate-200
+                     flex flex-col h-full">
+        <img
+          class="w-full aspect-[4/3] object-cover"
+          src="https://images.unsplash.com/photo-1501045661006-fcebe0257c3f?q=80&w=1200&auto=format&fit=crop"
+          alt="ห้องแอร์บิ้วอิน"
+        />
+        <div class="p-6 flex flex-col flex-1">
+          <h3 class="text-lg font-semibold text-ink">ห้องแอร์บิ้วอิน</h3>
+          <ul class="mt-2 text-sm text-slate-600 space-y-1 list-disc pl-5">
+            <li>เตียง 6 ฟุต</li>
+            <li>ตู้เสื้อผ้าบิ้วอิน</li>
+            <li>โต๊ะทำงานและเก้าอี้</li>
+            <li>เครื่องทำน้ำอุ่น</li>
+            <li>ตู้เย็น</li>
+            <li>เครื่องปรับอากาศ</li>
+          </ul>
+          <div class="mt-auto pt-4 flex items-center justify-between">
+            <span class="text-sm font-semibold text-ink">4,000 บ./เดือน</span>
+            <a href="#booking"
+               class="px-3 py-2 text-sm rounded-lg bg-primary-600 text-white hover:bg-primary-700">
+              จอง
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <article class="bg-white rounded-2xl shadow-card overflow-hidden border border-slate-200
+                     flex flex-col h-full">
+        <img
+          class="w-full aspect-[4/3] object-cover"
+          src="https://images.unsplash.com/photo-1501045661006-fcebe0257c3f?q=80&w=1200&auto=format&fit=crop"
+          alt="ห้องแอร์"
+        />
+        <div class="p-6 flex flex-col flex-1">
+          <h3 class="text-lg font-semibold text-ink">ห้องแอร์</h3>
+          <ul class="mt-2 text-sm text-slate-600 space-y-1 list-disc pl-5">
+            <li>เตียง 6 ฟุต</li>
+            <li>ตู้เสื้อผ้า</li>
+            <li>โต๊ะทำงานและเก้าอี้</li>
+            <li>เครื่องทำน้ำอุ่น</li>
+            <li>ตู้เย็น</li>
+            <li>เครื่องปรับอากาศ</li>
+          </ul>
+          <div class="mt-auto pt-4 flex items-center justify-between">
+            <span class="text-sm font-semibold text-ink">3,000 บ./เดือน</span>
+            <a href="#booking"
+               class="px-3 py-2 text-sm rounded-lg bg-primary-600 text-white hover:bg-primary-700">
+              จอง
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+    <section id="amenities" class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-semibold text-ink text-center">
+          สิ่งอำนวยความสะดวก
+        </h2>
+        <p class="mt-2 text-center text-slate-600">
+          ครบจบในที่เดียว ตอบโจทย์การใช้ชีวิตนักศึกษา/คนทำงาน
+        </p>
+        <div class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div
+            class="bg-soft border border-slate-200 rounded-xl p-5 text-center"
+          >
+            <div
+              class="mx-auto h-10 w-10 rounded-lg bg-primary-100 flex items-center justify-center"
+            >
+              🛡️
+            </div>
+            <div class="mt-3 font-medium text-ink">
+              กล้องวงจรปิด
+            </div>
+          </div>
+          <div
+            class="bg-soft border border-slate-200 rounded-xl p-5 text-center"
+          >
+            <div
+              class="mx-auto h-10 w-10 rounded-lg bg-primary-100 flex items-center justify-center"
+            >
+              🧺
+            </div>
+            <div class="mt-3 font-medium text-ink">
+              ร้านซักอบรีด & ตู้น้ำดื่ม
+            </div>
+          </div>
+          <div
+            class="bg-soft border border-slate-200 rounded-xl p-5 text-center"
+          >
+            <div
+              class="mx-auto h-10 w-10 rounded-lg bg-primary-100 flex items-center justify-center"
+            >
+              🚲
+            </div>
+            <div class="mt-3 font-medium text-ink">ที่จอดรถครบ</div>
+          </div>
+          <div
+            class="bg-soft border border-slate-200 rounded-xl p-5 text-center"
+          >
+            <div
+              class="mx-auto h-10 w-10 rounded-lg bg-primary-100 flex items-center justify-center"
+            >
+              📶
+            </div>
+            <div class="mt-3 font-medium text-ink">Wi-Fi ความเร็วสูง</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="status" class="py-20">
+      <div class="max-w-4xl mx-auto px-4">
+        <h2 class="text-2xl font-bold text-center text-blue-700">
+          แผนผังห้องพักและสถานะ
+        </h2>
+        <div class="h-1 w-20 bg-yellow-400 mx-auto mt-2 rounded"></div>
+
+        <!-- Legend -->
+        <div class="flex justify-center gap-6 mt-6 text-sm">
+          <div class="flex items-center gap-2">
+            <div class="w-5 h-5 rounded bg-blue-600"></div>
+            <span>ว่าง</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-5 h-5 rounded bg-gray-200"></div>
+            <span>ไม่ว่าง</span>
+          </div>
+        </div>
+
+    <div class="flex justify-center gap-3 mt-6">
+      <button data-zone="old"
+        class="zone-tab px-5 py-2 rounded-full font-medium shadow bg-blue-600 text-white hover:bg-gray-200">
+        โซนเก่า
+      </button>
+      <button data-zone="mid"
+        class="zone-tab px-5 py-2 rounded-full font-medium bg-gray-100 text-gray-700 hover:bg-gray-200">
+        โซนกลาง
+      </button>
+      <button data-zone="new"
+        class="zone-tab px-5 py-2 rounded-full font-medium bg-gray-100 text-gray-700 hover:bg-gray-200">
+        โซนใหม่
+      </button>
+    </div>
+
+    <div class="mt-8 p-6 bg-white border border-gray-200 rounded-2xl">
+
+    <!-- Zone Old -->
+    <div id="zone-old" class="zone grid grid-cols-3 gap-6 items-center">
+      <div class="flex flex-col gap-6">
+        <div class="room w-full py-4 rounded-lg text-center bg-gray-100 text-gray-500 cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="01">01</div>
+        <div class="room w-full py-4 rounded-lg text-center bg-gray-100 text-gray-500 cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="03">03</div>
+        <div class="room w-full py-4 rounded-lg text-center text-white font-semibold shadow bg-blue-600 cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="05">05</div>
+        <div class="room w-full py-4 rounded-lg text-center bg-gray-100 text-gray-500 cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="07">07</div>
+      </div>
+      <div class="h-full rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">ทางเดิน</div>
+      <div class="flex flex-col gap-6">
+        <div class="room w-full py-4 rounded-lg text-center text-white font-semibold shadow bg-blue-600 cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="02">02</div>
+        <div class="room w-full py-4 rounded-lg text-center bg-gray-100 text-gray-500 cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="04">04</div>
+        <div class="room w-full py-4 rounded-lg text-center bg-gray-100 text-gray-500 cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="06">06</div>
+      </div>
+    </div>
+
+    <!-- Zone Mid -->
+    <div id="zone-mid" class="zone hidden grid grid-cols-3 gap-6 items-center">
+      <div class="flex flex-col gap-6">
+        <div class="room w-full py-6 rounded-xl text-center text-gray-500 bg-gray-100 cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="08">08</div>
+        <div class="room w-full py-6 rounded-xl text-center text-gray-500 bg-gray-100 cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="10">10</div>
+        <div class="room w-full py-6 rounded-xl text-center text-white bg-blue-700 font-semibold shadow cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="12">12</div>
+        <div class="room w-full py-6 rounded-xl text-center text-gray-500 bg-gray-100 cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="14">14</div>
+      </div>
+      <div class="h-full rounded-xl bg-gray-100 flex items-center justify-center text-gray-400 text-lg">ทางเดิน</div>
+      <div class="flex flex-col gap-6">
+        <div class="room w-full py-6 rounded-xl text-center text-white bg-blue-700 font-semibold shadow cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="09">09</div>
+        <div class="room w-full py-6 rounded-xl text-center text-gray-500 bg-gray-100 cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="11">11</div>
+        <div class="room w-full py-6 rounded-xl text-center text-gray-500 bg-gray-100 cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="13">13</div>
+      </div>
+    </div>
+
+    <!-- Zone New -->
+    <div id="zone-new" class="zone hidden grid grid-cols-3 gap-6 items-center">
+      <div class="flex flex-col gap-6">
+        <div class="room w-full py-6 rounded-xl text-center text-white bg-blue-700 font-semibold shadow cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="15">15</div>
+        <div class="room w-full py-6 rounded-xl text-center text-gray-500 bg-gray-100 cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="17">17</div>
+        <div class="room w-full py-6 rounded-xl text-center text-gray-500 bg-gray-100 cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="19">19</div>
+      </div>
+      <div class="h-full rounded-xl bg-gray-100 flex items-center justify-center text-gray-400 text-lg">ทางเดิน</div>
+      <div class="flex flex-col gap-6">
+        <div class="room w-full py-6 rounded-xl text-center text-gray-500 bg-gray-100 cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="16">16</div>
+        <div class="room w-full py-6 rounded-xl text-center text-white bg-blue-700 font-semibold shadow cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="18">18</div>
+        <div class="room w-full py-6 rounded-xl text-center text-white bg-blue-700 font-semibold shadow cursor-pointer hover:ring-2 hover:ring-primary-600 focus:outline-none focus:ring-2 transition" role="button" tabindex="0" data-room="20">20</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <section id="agreement">
+      <div class="bg-white">
+        <main class="container max-w-5xl mx-auto px-4 md:px-6 py-10 md:py-14">
+          <div class="text-center">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-blue-700">
+              ตัวอย่างสัญญาและเงื่อนไขการเช่า
+            </h1>
+            <div class="h-1 w-16 bg-yellow-400 rounded mx-auto mt-3"></div>
+          </div>
+          <section
+          class="card mt-8 rounded-2xl bg-white shadow-xl border border-slate-200"
+          >
+          <div class="p-6 md:p-10">
+            <h2
+            class="text-xl md:text-2xl font-semibold text-center text-slate-900"
+            >
+            ตัวอย่างสัญญาเช่าห้องพัก “บ้านพักกัน”
+          </h2>
+          
+          <p class="mt-6 leading-7">
+            สถานที่: บ้านพักกัน เลขที่ (ที่อยู่หอพัก) ตำบล/แขวง อำเภอ/เขต
+            จังหวัด XXXXX รหัสไปรษณีย์ XXXXX<br />
+            สัญญาฉบับนี้ทำขึ้นระหว่าง
+            <b>“บ้านพักกัน” โดย (ชื่อเจ้าของหอ/ผู้ดูแล)</b>
+            ซึ่งต่อไปในสัญญานี้เรียกว่า <b>“ผู้ให้เช่า”</b> ฝ่ายหนึ่ง กับ
+            <b>(ชื่อ–นามสกุล ผู้เช่า)</b> เลขบัตรประชาชน/หนังสือเดินทาง
+            <b>(เลขที่)</b> ซึ่งต่อไปในสัญญานี้เรียกว่า
+            <b>“ผู้เช่า”</b> อีกฝ่ายหนึ่ง
+            ทั้งสองฝ่ายตกลงทำสัญญาเช่าโดยมีเงื่อนไขดังต่อไปนี้
+          </p>
+          
+          <div class="mt-6 space-y-6">
+            <div>
+              <h3 class="font-semibold text-slate-900">
+                ข้อ 1 ทรัพย์สินที่เช่า
+              </h3>
+              <p class="mt-2 leading-7">
+                ผู้ให้เช่าตกลงให้เช่าและผู้เช่าตกลงเช่าห้องหมายเลข _______ ชั้น
+                _____ อาคาร ________ ณ สถานที่ตามที่อยู่ข้างต้น
+                เพื่อใช้เป็นที่อยู่อาศัยของผู้เช่า
+              </p>
+            </div>
+            
+            <div>
+              <h3 class="font-semibold text-slate-900">
+                ข้อ 2 ค่าเช่าและเงื่อนไขการชำระ
+              </h3>
+              <p class="mt-2 leading-7">
+                ค่าเช่ารายเดือนเป็นจำนวน <b>______ บาท</b> (______บาทถ้วน)
+                ชำระทุกวันที่ <b>____</b> ของเดือน
+                ค่าน้ำประปา/ค่าไฟฟ้า/อินเทอร์เน็ต
+                ชำระตามจริงหรืออัตราที่ผู้ให้เช่ากำหนด
+              </p>
+            </div>
+            
+            <div>
+              <h3 class="font-semibold text-slate-900">
+                ข้อ 3 ค่ามัดจำและความเสียหาย
+              </h3>
+              <p class="mt-2 leading-7">
+                ผู้เช่าชำระเงินมัดจำเป็นจำนวน <b>______ บาท</b> ณ วันที่ทำสัญญา
+                ผู้ให้เช่าจะคืนเงินมัดจำเมื่อผู้เช่าส่งมอบห้องในสภาพเรียบร้อย
+                หากเกิดความเสียหาย ผู้ให้เช่ามีสิทธินำเงินมัดจำหักค่าเสียหายได้
+              </p>
+            </div>
+            
+            <div>
+              <h3 class="font-semibold text-slate-900">
+                ข้อ 4 ระยะเวลาสัญญาและการบอกเลิก
+              </h3>
+              <p class="mt-2 leading-7">
+                สัญญานี้มีกำหนดเวลา <b>__ เดือน</b> เริ่มตั้งแต่วันที่
+                <b>__/__/____</b> ถึงวันที่
+                <b>__/__/____</b> การบอกเลิกสัญญาต้องแจ้งล่วงหน้าไม่น้อยกว่า
+                <b>__ วัน</b> เป็นลายลักษณ์อักษร
+              </p>
+            </div>
+            
+            <div>
+              <h3 class="font-semibold text-slate-900">
+                ข้อ 5 ข้อปฏิบัติระหว่างการเช่า
+              </h3>
+              <ul class="mt-2 leading-7 list-disc pl-6">
+                <li>
+                  ห้ามดัดแปลง ต่อเติม
+                  ทำลายทรัพย์สินของผู้ให้เช่าโดยไม่ได้รับอนุญาต
+                </li>
+                <li>ห้ามส่งเสียงดังรบกวนและกระทำการผิดกฎหมายภายในอาคาร</li>
+                <li>ห้ามเลี้ยงสัตว์ หากไม่ได้รับอนุญาตเป็นลายลักษณ์อักษร</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 class="font-semibold text-slate-900">ข้อ 6 อื่น ๆ</h3>
+              <p class="mt-2 leading-7">
+                เงื่อนไขอื่นที่ตกลงร่วมกันระหว่างผู้ให้เช่าและผู้เช่า (ถ้ามี)
+                _________________________________
+              </p>
+            </div>
+          </div>
+          
+          <div class="mt-10 grid md:grid-cols-3 gap-8">
+            <div class="text-center">
+              <div class="h-16"></div>
+              <div class="border-t border-slate-300 pt-2">
+                ผู้ให้เช่า ____________________
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="h-16"></div>
+              <div class="border-t border-slate-300 pt-2">
+                ผู้เช่า ____________________
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="h-16"></div>
+              <div class="border-t border-slate-300 pt-2">
+                พยาน ____________________
+              </div>
+            </div>
+          </div>
+          <div class="mt-8 text-sm text-slate-500">
+            หมายเหตุ: เอกสารนี้เป็นตัวอย่างเท่านั้น
+            โปรดปรับให้สอดคล้องกับข้อกฎหมายและเงื่อนไขจริงของสถานประกอบการ
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-16">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-semibold text-ink text-center">
+          คำถามที่พบบ่อย
+        </h2>
+        <div
+          class="mt-8 divide-y divide-slate-200 rounded-2xl bg-white shadow-card"
+        >
+          <details class="group p-6" open>
+            <summary
+              class="flex cursor-pointer list-none items-center justify-between"
+            >
+              <span class="font-medium text-ink">ค่าน้ำ-ไฟ คิดอัตราเท่าไหร่?</span
+              ><span class="transition group-open:rotate-180">⌄</span>
+            </summary>
+            <p class="mt-4 text-sm text-slate-600">
+              ค่าน้ำคิดอัตราหน่วยละ 18 บาท และค่าไฟหน่วยละ 8 บาท (ตามอัตรามาตรฐานของหอพัก)
+            </p>
+          </details>
+          <details class="group p-6">
+            <summary
+              class="flex cursor-pointer list-none items-center justify-between"
+            >
+              <span class="font-medium text-ink">สามารถเลี้ยงสัตว์เลี้ยงได้หรือไม่?</span
+              ><span class="transition group-open:rotate-180">⌄</span>
+            </summary>
+            <p class="mt-4 text-sm text-slate-600">
+              ขออภัยค่ะ หอพักของเราไม่อนุญาตให้เลี้ยงสัตว์เลี้ยงทุกชนิด เพื่อสุขอนามัยที่ดีของส่วนรวม
+            </p>
+          </details>
+          <details class="group p-6">
+            <summary
+              class="flex cursor-pointer list-none items-center justify-between"
+            >
+              <span class="font-medium text-ink"
+                >มีที่จอดรถยนต์ให้บริการหรือไม่?</span
+              ><span class="transition group-open:rotate-180">⌄</span>
+            </summary>
+            <p class="mt-4 text-sm text-slate-600">
+              หอพักมีที่จอดสำหรับรถมอเตอร์ไซค์ให้บริการฟรี ส่วนที่จอดรถยนต์มีจำนวนจำกัดและมีค่าบริการเพิ่มเติม กรุณาติดต่อสอบถาม
+            </p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="py-16 bg-white">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-ink">ติดต่อเรา</h2>
+          <p class="mt-2 text-slate-600">สอบถามข้อมูลหอพัก หรือจองห้องพักได้ที่นี่</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="space-y-6">
+            <div class="flex items-center gap-3">
+              <i data-lucide="map-pin" class="w-6 h-6 text-primary-600"></i>
+              <span>หน้ามหาวิทยาลัยพะเยา ต.แม่กา อ.เมือง จ.พะเยา 56000</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <i data-lucide="phone" class="w-6 h-6 text-primary-600"></i>
+              <span>โทร: 088-123-4567</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <i data-lucide="mail" class="w-6 h-6 text-primary-600"></i>
+              <span>อีเมล: banpakkan@gmail.com</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <i data-lucide="line-chart" class="w-6 h-6 text-primary-600"></i>
+              <span>LINE: @banpakkan</span>
+            </div>
+          </div>
+
+          <form class="bg-white rounded-2xl shadow-card p-6 space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-700">ชื่อ</label>
+              <input type="text" class="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500" placeholder="กรอกชื่อของคุณ">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700">อีเมล</label>
+              <input type="email" class="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500" placeholder="example@email.com">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700">ข้อความ</label>
+              <textarea rows="4" class="mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500" placeholder="เขียนข้อความของคุณ"></textarea>
+            </div>
+            <button type="submit" class="w-full px-4 py-3 bg-primary-600 text-white rounded-lg font-semibold shadow hover:bg-primary-700 transition">
+              ส่งข้อความ
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <div id="roomModal" class="fixed inset-0 z-[60] hidden">
+      <div id="roomModalOverlay" class="absolute inset-0 bg-black/60"></div>
+        <div class="relative mx-auto my-10 max-w-3xl rounded-2xl bg-white shadow-2xl p-6 md:p-8">
+          <button id = "roomModalClose"onclick="closeModal()" 
+            class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 
+            text-3xl font-bold leading-none w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100">
+            ×
+          </button>
+        <h3 id="m-title" class="text-2xl font-extrabold text-slate-800">รายละเอียดห้อง</h3>
+        <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <img id="m-photo" class="h-40 w-full object-cover rounded-xl"
+              src="https://images.unsplash.com/photo-1501045661006-fcebe0257c3f?q=80&w=1200&auto=format&fit=crop" alt="room" />
+          <div>
+            <p class="text-sm"><span class="font-semibold">ประเภท: </span><span id="m-type">—</span></p>
+            <p class="text-sm"><span class="font-semibold">ราคา: </span><span id="m-price">—</span></p>
+            <p class="text-sm">
+              <span class="font-semibold">สถานะ: </span>
+              <span id="m-status"
+                class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold
+                      text-white bg-blue-600">ว่าง</span>
+            </p>
+            <p class="mt-3 font-semibold">สิ่งอำนวยความสะดวก:</p>
+            <ul id="m-amenities" class="list-disc pl-5 text-sm space-y-1 mt-1"></ul>
+          </div>
+        </div>
+        <button id="m-cta"
+          class="mt-7 w-full rounded-xl bg-primary-700 text-white py-3 font-semibold
+                disabled:opacity-50 disabled:cursor-not-allowed">
+          ติดต่อเพื่อจองห้องนี้
+        </button>
+      </div>
+    </div>
+    <div id="loginModal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50">
+      <div class="bg-white w-full max-w-md rounded-2xl shadow-xl p-8 relative">
+        <button class="absolute top-4 right-4 text-gray-400 hover:text-gray-600" onclick="toggleLogin()">
+          ✕
+        </button>
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-xl bg-primary-600 flex items-center justify-center text-white font-bold">
+            BK
+          </div>
+          <h2 class="text-xl font-bold text-ink">เข้าสู่ระบบ</h2>
+        </div>
+
+        <!-- Form -->
+        <form id="loginForm" class="space-y-5">
+          <div>
+            <label class="block text-sm font-medium text-slate-700">อีเมล</label>
+            <input type="email" id="email" placeholder="you@example.com" required
+              class="mt-1 w-full px-4 py-3 rounded-lg border border-slate-300 
+                    focus:ring-2 focus:ring-primary-500 focus:border-primary-500 
+                    placeholder-slate-400">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700">รหัสผ่าน</label>
+          <div class="relative mt-1">
+          <input type="password" id="password" placeholder="••••••••" required
+            class="w-full px-4 py-3 rounded-lg border border-slate-300 
+                  focus:ring-2 focus:ring-primary-500 focus:border-primary-500 
+                  placeholder-slate-400">
+
+          <button type="button" onclick="togglePassword(this)" 
+            class="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700">
+            <svg xmlns="http://www.w3.org/2000/svg" id="eyeIcon" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.008 9.963 7.178.07.207.07.432 0 .639C20.573 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.008-9.963-7.178z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" 
+        class="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-lg shadow transition">
+        เข้าสู่ระบบ
+      </button>
+    </form>
+  </div>
+</div>
+
+
+
+    <!-- FOOTER -->
+    <footer id="contact" class="border-t border-slate-200 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid md:grid-cols-4 gap-8">
+          <div>
+            <div class="flex items-center gap-2">
+              <span
+                class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary-600 text-white font-semibold"
+                >BK</span
+              >
+              <span class="font-semibold text-slate-900">บ้านพักกัน</span>
+            </div>
+            <p class="mt-4 text-sm text-slate-600">
+              หอพักคุณภาพ เดินทางสะดวก พร้อมสิ่งอำนวยความสะดวกครบครัน ตอบโจทย์ทุกไลฟ์สไตล์ของนักศึกษา
+            </p>
+          </div>
+          <div>
+            <div class="font-semibold text-ink">ที่อยู่</div>
+            <ul class="mt-3 space-y-2 text-sm">
+              <li>หน้ามหาวิทยาลัยพะเยา ต.แม่กา อ.เมือง จ.พะเยา 56000</li>
+            </ul>
+          </div>
+          <div>
+            <div class="font-semibold text-ink">ติดต่อ</div>
+            <ul class="mt-3 space-y-2 text-sm">
+              <li>โทร. 088-123-4567</li>
+              <li>LINE: @banpakkan</li>
+              <li>อีเมล: banpakkan@gmail.com</li>
+            </ul>
+          </div>
+          <div>
+            <div class="font-semibold text-ink">ลิงก์ด่วน</div>
+            <ul class="mt-3 space-y-2 text-sm">
+              <li>
+                <a class="hover:text-primary-700" href="#rooms">ดูห้องว่าง</a>
+              </li>
+              <li>
+                <a class="hover:text-primary-700" href="#agreement"
+                  >สัญญาเช่า</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <p class="mt-10 text-xs text-slate-500">
+          © 2025 บ้านพักกัน
+        </p>
+      </div>
+    </footer>
+    <script src="./js/script.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+
+  </body>
+</html>
